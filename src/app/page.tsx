@@ -7,7 +7,6 @@ import EmailOptIn from '@/components/EmailOptIn';
 import LiveFeed from '@/components/LiveFeed';
 import BackgroundAmbient from '@/components/BackgroundAmbient';
 import { useI18n } from '@/components/I18nContext';
-import { Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
@@ -37,8 +36,8 @@ export default function Home() {
         isSearchFocused ? 'opacity-0 blur-sm pointer-events-none' : 'opacity-100'
       }`}>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <div className="flex items-center gap-2 font-serif font-black text-zinc-900 opacity-20 hover:opacity-100 transition-opacity">
-            <span className="text-xl tracking-tighter italic">OMP.</span>
+          <div className="flex items-center gap-2 font-serif font-black text-zinc-900 opacity-20 hover:opacity-100 transition-opacity text-xl italic">
+            OMP.
           </div>
           
           <div className="flex items-center gap-6">
@@ -70,27 +69,31 @@ export default function Home() {
       </div>
 
       <div className="relative w-full flex flex-col items-center">
-        {/* 
-          Block 3: The "Absolute Center" Hub 
-          RE-ENGINEERED: Using absolute vertical positioning to force 40% offset 
-        */}
+        {/* Block 3: The "Absolute Center" Hub */}
         <section className="relative w-full h-screen flex flex-col items-center px-6">
-          <motion.div 
-            animate={{ 
-              y: isSearchFocused ? '-15vh' : '0vh',
-              opacity: isSearchFocused ? 0.3 : 1,
-              scale: isSearchFocused ? 0.9 : 1
-            }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-[40%] -translate-y-1/2 w-full flex flex-col items-center gap-8 md:gap-12"
-          >
-            <Hero />
+          
+          {/* Static container for positioning at 40% */}
+          <div className="absolute top-[40%] -translate-y-1/2 w-full flex flex-col items-center gap-8 md:gap-12">
             
-            <div className="w-full flex flex-col items-center gap-8 relative">
+            {/* HERO - This FADES on search focus */}
+            <motion.div 
+              animate={{ 
+                opacity: isSearchFocused ? 0.3 : 1,
+                scale: isSearchFocused ? 0.95 : 1,
+                filter: isSearchFocused ? 'blur(2px)' : 'blur(0px)'
+              }}
+              transition={{ duration: 0.6 }}
+              className="w-full"
+            >
+              <Hero />
+            </motion.div>
+            
+            {/* SEARCH BAR - This stays BRIGHT and high z-index */}
+            <div className="w-full flex flex-col items-center gap-8 relative z-[1000]">
               <SearchBar onFocusChange={setIsSearchFocused} />
               
               <motion.div 
-                animate={{ opacity: isSearchFocused ? 0 : 1 }}
+                animate={{ opacity: isSearchFocused ? 0 : 1, y: isSearchFocused ? 10 : 0 }}
                 className="flex flex-wrap justify-center gap-4"
               >
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-300">Popular:</span>
@@ -101,14 +104,14 @@ export default function Home() {
                 ))}
               </motion.div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Scroll Indicator */}
           <motion.div 
             animate={{ opacity: isSearchFocused ? 0 : 0.2 }}
             className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           >
-            <span className="text-[8px] font-black uppercase tracking-[0.4em] text-zinc-900 font-sans">Scroll</span>
+            <span className="text-[8px] font-black uppercase tracking-[0.4em] text-zinc-900 font-sans tracking-widest">Scroll</span>
             <div className="h-12 w-px bg-gradient-to-b from-zinc-900 to-transparent" />
           </motion.div>
         </section>
@@ -120,7 +123,7 @@ export default function Home() {
           {/* Block 4: Intelligence Grid */}
           <section className="w-full py-32 flex flex-col items-center gap-24">
             <div className="text-center px-6">
-              <h2 className="text-5xl md:text-8xl font-serif font-black tracking-tighter text-zinc-900 italic mb-6 text-left md:text-center">Database.</h2>
+              <h2 className="text-5xl md:text-8xl font-serif font-black tracking-tighter text-zinc-900 italic mb-6">Database.</h2>
               <p className="text-zinc-400 font-sans text-[10px] font-black uppercase tracking-[0.5em]">Peer-verified academic survival data</p>
             </div>
             <HeroCards />
@@ -133,7 +136,7 @@ export default function Home() {
 
           {/* Block 6: Footer */}
           <footer className="w-full py-20 px-6 flex flex-col items-center gap-10 border-t border-zinc-100">
-            <p className="text-center text-[9px] font-black uppercase tracking-[0.5em] text-zinc-200 font-sans">
+            <p className="text-center text-[9px] font-black uppercase tracking-[0.5em] text-zinc-200 font-sans tracking-widest">
               Oh My Professors &bull; Australia &bull; 2026
             </p>
           </footer>
