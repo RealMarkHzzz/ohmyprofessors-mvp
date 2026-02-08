@@ -5,11 +5,22 @@
 @theme inline {
   --font-serif: "EB Garamond", "Crimson Text", serif;
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  /* High Contrast Neutral Palette for Light Mode */
+  --color-brand-primary: #4F46E5; /* Indigo 600 */
+  --color-brand-accent: #F97316;  /* Orange 500 */
+  --color-surface-bg: #FFFFFF;
+  --color-surface-muted: #F8FAFC;
+  --color-text-main: #0F172A;     /* Slate 900 */
+  --color-text-body: #334155;     /* Slate 700 */
+  --color-text-muted: #64748B;    /* Slate 500 */
+  --color-border-subtle: #E2E8F0; /* Slate 200 */
+  --color-border-strong: #94A3B8; /* Slate 400 */
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #18181b;
+  --background: #FFFFFF;
+  --foreground: #0F172A;
   color-scheme: light;
 }
 
@@ -21,10 +32,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Force light mode even if system is dark */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #18181b;
+/* Force light mode styles globally */
+* {
+  @apply border-zinc-200;
+}
+
+::selection {
+  background-color: #E0E7FF;
+  color: #312E81;
+}
+
+@layer base {
+  input:focus, button:focus {
+    @apply outline-none ring-2 ring-indigo-500 ring-offset-2;
   }
 }

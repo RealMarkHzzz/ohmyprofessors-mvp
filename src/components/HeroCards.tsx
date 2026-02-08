@@ -1,33 +1,53 @@
 import React from 'react';
+import { Flame, Moon, Star, ShieldCheck } from 'lucide-react';
 
 const HeroCards = () => {
   const cards = [
     {
-      title: 'Top 5 Easy A Electives',
-      description: 'The easiest units to boost your GPA in Semester 1.',
-      icon: '🔥',
-      color: 'bg-orange-50 dark:bg-orange-900/10',
-      border: 'border-orange-100 dark:border-orange-900/30'
+      title: 'WAM Boosters',
+      description: 'The units where average marks are highest.',
+      icon: <Flame className="text-orange-500" />,
+      color: 'bg-orange-50/50',
+      border: 'border-orange-200',
+      tag: 'HOT'
     },
     {
-      title: 'Professors to Avoid',
-      description: 'The 10 units where you might value sleep more than the grade.',
-      icon: '😴',
-      color: 'bg-purple-50 dark:bg-purple-900/10',
-      border: 'border-purple-100 dark:border-purple-900/30'
+      title: 'Easy Electives',
+      description: 'Coursework that won\'t steal your weekends.',
+      icon: <Star className="text-yellow-500" />,
+      color: 'bg-yellow-50/50',
+      border: 'border-yellow-200',
+      tag: 'NEW'
     }
   ];
 
   return (
-    <div className="grid w-full max-w-4xl grid-cols-1 gap-4 px-4 sm:grid-cols-2">
+    <div className="grid w-full max-w-4xl grid-cols-1 gap-6 px-4 md:grid-cols-2">
       {cards.map((card) => (
         <div
           key={card.title}
-          className={`group flex cursor-pointer flex-col rounded-2xl border ${card.border} ${card.color} p-6 transition-all hover:scale-[1.02] hover:shadow-lg`}
+          className={`group relative flex cursor-pointer flex-col bg-white border-2 border-zinc-900 p-8 transition-all hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none`}
         >
-          <div className="mb-4 text-3xl">{card.icon}</div>
-          <h4 className="mb-2 font-bold text-zinc-900 dark:text-zinc-100">{card.title}</h4>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">{card.description}</p>
+          <div className="absolute top-4 right-4 flex h-6 items-center bg-zinc-900 px-2 text-[10px] font-black text-white uppercase tracking-widest">
+            {card.tag}
+          </div>
+          
+          <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl border-2 border-zinc-900 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:bg-indigo-50 transition-colors">
+            {React.cloneElement(card.icon as React.ReactElement, { className: 'h-7 w-7' })}
+          </div>
+          
+          <h4 className="mb-3 text-2xl font-black text-zinc-900 uppercase tracking-tighter italic">
+            {card.title}
+          </h4>
+          
+          <p className="text-zinc-600 font-serif text-lg leading-snug">
+            {card.description}
+          </p>
+          
+          <div className="mt-8 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-indigo-600">
+            View Intelligence
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </div>
         </div>
       ))}
     </div>
