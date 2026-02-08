@@ -3,8 +3,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Flame, Star, Zap, ShieldAlert, LucideIcon } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 
-interface Card {
+interface CardItem {
   title: string;
   description: string;
   Icon: LucideIcon;
@@ -15,7 +16,7 @@ interface Card {
 }
 
 const HeroCards = () => {
-  const cards: Card[] = [
+  const cards: CardItem[] = [
     {
       title: 'WAM Boosters',
       description: 'The units where average marks are consistently highest.',
@@ -55,37 +56,39 @@ const HeroCards = () => {
   ];
 
   return (
-    <div className="grid w-full max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid w-full max-w-6xl grid-cols-1 gap-8 px-4 md:grid-cols-2 lg:grid-cols-4 font-sans">
       {cards.map((card) => (
         <motion.div
           key={card.title}
-          whileHover={{ y: -8, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.08)' }}
-          className="group relative flex flex-col bg-white rounded-[32px] border border-zinc-100 p-8 transition-all cursor-pointer overflow-hidden"
+          whileHover={{ y: -8 }}
+          className="flex"
         >
-          {/* Animated Background Pulse */}
-          <div className={`absolute -right-4 -bottom-4 h-24 w-24 rounded-full ${card.bg} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity`} />
-          
-          <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-50 border border-zinc-100 group-hover:scale-110 transition-transform duration-500 text-zinc-900">
-            <card.Icon className={`h-7 w-7 ${card.color}`} />
-          </div>
-          
-          <h4 className="mb-3 text-xl font-black text-zinc-900 font-sans tracking-tight leading-none uppercase text-left">
-            {card.title}
-          </h4>
-          
-          <p className="text-zinc-500 font-serif text-base leading-snug mb-8 text-left">
-            {card.description}
-          </p>
-          
-          <div className="mt-auto flex flex-col gap-4">
-            <div className="h-px w-full bg-zinc-50" />
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-300">
-                {card.data}
-              </span>
-              <div className="h-2 w-2 rounded-full bg-indigo-600 animate-pulse" />
-            </div>
-          </div>
+          <Card className="group relative flex flex-col w-full bg-background rounded-[32px] border-2 border-border p-2 transition-all cursor-pointer overflow-hidden hover:border-primary hover:shadow-cinematic">
+            {/* Animated Background Pulse */}
+            <div className={`absolute -right-4 -bottom-4 h-24 w-24 rounded-full ${card.bg} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity`} />
+            
+            <CardHeader className="p-6">
+              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary border border-border group-hover:scale-110 transition-transform duration-500 text-foreground">
+                <card.Icon className={`h-7 w-7 ${card.color}`} />
+              </div>
+              <CardTitle className="text-xl font-black text-foreground font-sans tracking-tight leading-none uppercase">
+                {card.title}
+              </CardTitle>
+              <CardDescription className="text-muted-foreground font-serif text-base leading-snug pt-2">
+                {card.description}
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent className="mt-auto px-6 pb-6">
+              <div className="h-px w-full bg-border/50 mb-4" />
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                  {card.data}
+                </span>
+                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
       ))}
     </div>
