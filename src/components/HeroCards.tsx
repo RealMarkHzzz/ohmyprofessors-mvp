@@ -1,12 +1,21 @@
 import React from 'react';
-import { Flame, Moon, Star, ShieldCheck } from 'lucide-react';
+import { Flame, Star, LucideIcon } from 'lucide-react';
+
+interface Card {
+  title: string;
+  description: string;
+  Icon: LucideIcon;
+  color: string;
+  border: string;
+  tag: string;
+}
 
 const HeroCards = () => {
-  const cards = [
+  const cards: Card[] = [
     {
       title: 'WAM Boosters',
       description: 'The units where average marks are highest.',
-      icon: <Flame className="text-orange-500" />,
+      Icon: Flame,
       color: 'bg-orange-50/50',
       border: 'border-orange-200',
       tag: 'HOT'
@@ -14,7 +23,7 @@ const HeroCards = () => {
     {
       title: 'Easy Electives',
       description: 'Coursework that won\'t steal your weekends.',
-      icon: <Star className="text-yellow-500" />,
+      Icon: Star,
       color: 'bg-yellow-50/50',
       border: 'border-yellow-200',
       tag: 'NEW'
@@ -33,7 +42,7 @@ const HeroCards = () => {
           </div>
           
           <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl border-2 border-zinc-900 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:bg-indigo-50 transition-colors">
-            {React.cloneElement(card.icon as React.ReactElement, { className: 'h-7 w-7' })}
+            <card.Icon className="h-7 w-7 text-zinc-900" />
           </div>
           
           <h4 className="mb-3 text-2xl font-black text-zinc-900 uppercase tracking-tighter italic">
