@@ -1,18 +1,21 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 
 const GpaRollingNumber = ({ target }: { target: number }) => {
-  const spring = useSpring(0, { stiffness: 50, damping: 20 });
+  const spring = useSpring(0, { stiffness: 40, damping: 20 });
   const displayValue = useTransform(spring, (value) => value.toFixed(1));
 
   useEffect(() => {
-    spring.set(target);
+    const timer = setTimeout(() => {
+      spring.set(target);
+    }, 500);
+    return () => clearTimeout(timer);
   }, [target, spring]);
 
   return (
-    <motion.span className="inline-block tabular-nums text-indigo-600 font-bold min-w-[1.2em]">
+    <motion.span className="inline-block tabular-nums font-black">
       {displayValue}
     </motion.span>
   );
