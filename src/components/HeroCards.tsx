@@ -2,14 +2,24 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Flame, Star, Zap, ShieldAlert } from 'lucide-react';
+import { Flame, Star, Zap, ShieldAlert, LucideIcon } from 'lucide-react';
+
+interface Card {
+  title: string;
+  description: string;
+  Icon: LucideIcon;
+  color: string;
+  bg: string;
+  data: string;
+  theme: string;
+}
 
 const HeroCards = () => {
-  const cards = [
+  const cards: Card[] = [
     {
       title: 'WAM Boosters',
       description: 'The units where average marks are consistently highest.',
-      icon: <Flame />,
+      Icon: Flame,
       color: 'text-orange-500',
       bg: 'bg-orange-50/30',
       data: '128 Units Indexed',
@@ -18,7 +28,7 @@ const HeroCards = () => {
     {
       title: 'Easy Electives',
       description: 'High reward coursework that won\'t steal your weekends.',
-      icon: <Star />,
+      Icon: Star,
       color: 'text-indigo-500',
       bg: 'bg-indigo-50/30',
       data: '42 Guides Ready',
@@ -27,8 +37,8 @@ const HeroCards = () => {
     {
       title: 'Hard Markers',
       description: 'The 10 units where you might value sleep more than the grade.',
-      icon: <ShieldAlert />,
-      color: 'text-brand-danger',
+      Icon: ShieldAlert,
+      color: 'text-red-500',
       bg: 'bg-red-50/30',
       data: 'Top 10 Risk List',
       theme: 'Danger'
@@ -36,8 +46,8 @@ const HeroCards = () => {
     {
       title: 'Real-time Feed',
       description: 'See exactly what students are saying right this second.',
-      icon: <Zap />,
-      color: 'text-brand-success',
+      Icon: Zap,
+      color: 'text-emerald-500',
       bg: 'bg-emerald-50/30',
       data: 'Live Intelligence',
       theme: 'Success'
@@ -46,7 +56,7 @@ const HeroCards = () => {
 
   return (
     <div className="grid w-full max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-4">
-      {cards.map((card, i) => (
+      {cards.map((card) => (
         <motion.div
           key={card.title}
           whileHover={{ y: -8, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.08)' }}
@@ -55,15 +65,15 @@ const HeroCards = () => {
           {/* Animated Background Pulse */}
           <div className={`absolute -right-4 -bottom-4 h-24 w-24 rounded-full ${card.bg} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity`} />
           
-          <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-50 border border-zinc-100 group-hover:scale-110 transition-transform duration-500">
-            {React.cloneElement(card.icon as React.ReactElement, { className: `h-7 w-7 ${card.color}` })}
+          <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-50 border border-zinc-100 group-hover:scale-110 transition-transform duration-500 text-zinc-900">
+            <card.Icon className={`h-7 w-7 ${card.color}`} />
           </div>
           
-          <h4 className="mb-3 text-xl font-black text-zinc-900 font-sans tracking-tight leading-none uppercase">
+          <h4 className="mb-3 text-xl font-black text-zinc-900 font-sans tracking-tight leading-none uppercase text-left">
             {card.title}
           </h4>
           
-          <p className="text-zinc-500 font-serif text-base leading-snug mb-8">
+          <p className="text-zinc-500 font-serif text-base leading-snug mb-8 text-left">
             {card.description}
           </p>
           

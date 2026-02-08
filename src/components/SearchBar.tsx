@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Flame, MapPin, GraduationCap, ArrowRight } from 'lucide-react';
 import RatingIndicator from './RatingIndicator';
@@ -10,12 +11,22 @@ const SearchBar = () => {
   const { t } = useI18n();
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState('');
+  const overlayRef = useRef(null);
 
   const capsules = [
     { code: 'COMP10001', label: 'Trending', icon: <Flame className="h-3 w-3 text-orange-500" /> },
     { code: 'UniMelb', label: 'G8', icon: <GraduationCap className="h-3 w-3 text-indigo-500" /> },
     { code: 'Sydney', label: 'Hot', icon: <MapPin className="h-3 w-3 text-red-500" /> },
   ];
+
+  useLayoutEffect(() => {
+    if (isFocused && overlayRef.current) {
+      gsap.fromTo(".suggestion-item", 
+        { opacity: 0, x: -10 }, 
+        { opacity: 1, x: 0, stagger: 0.05, duration: 0.4, ease: "power2.out" }
+      );
+    }
+  }, [isFocused]);
 
   return (
     <div className="relative w-full max-w-3xl px-4 z-[200]">
@@ -52,6 +63,7 @@ const SearchBar = () => {
       <AnimatePresence>
         {isFocused && (
           <motion.div 
+            ref={overlayRef}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -59,17 +71,18 @@ const SearchBar = () => {
           >
             <div className="flex items-center justify-between mb-6 px-2">
               <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Omni-Search Intelligence</span>
-              <span className="text-[10px] font-bold text-indigo-600 underline">Browse by University</span>
+              <span className="text-[10px] font-bold text-indigo-600 underline cursor-pointer">Browse by University</span>
             </div>
             
             <div className="space-y-2">
               {[
                 { type: 'Professor', name: 'Alistair Moffat', sub: 'UniMelb • Computer Science', rating: 'Green' },
                 { type: 'Course', name: 'BUSS1000', sub: 'USYD • Business Environment', rating: 'Yellow' },
+                { type: 'Course', name: 'COMP10001', sub: 'UniMelb • Foundations of Computing', rating: 'Green' },
               ].map((res, i) => (
-                <button key={i} className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-indigo-50/50 transition-all group">
+                <button key={i} className="suggestion-item w-full flex items-center justify-between p-4 rounded-2xl hover:bg-indigo-50/50 transition-all group">
                   <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-zinc-100 flex items-center justify-center text-[10px] font-black text-zinc-400 group-hover:bg-white group-hover:text-indigo-600 transition-colors">
+                    <div className="h-10 w-10 rounded-xl bg-zinc-100 flex items-center justify-center text-[10px] font-black text-zinc-400 group-hover:bg-white group-hover:text-indigo-600 transition-colors uppercase">
                       {res.type[0]}
                     </div>
                     <div className="text-left">
