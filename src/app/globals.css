@@ -5,23 +5,22 @@
   --font-serif: "EB Garamond", "Crimson Text", serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   
-  /* 2026 Expanded Color Psychology Palette */
-  --color-brand-primary: #4F46E5; /* Blurple - Wisdom */
-  --color-brand-success: #10B981; /* Mint - Safe/Recommended */
-  --color-brand-warning: #FBBF24; /* Amber - High Challenge */
-  --color-brand-danger: #EF4444;  /* Rose - Risk */
+  --color-brand-primary: #4F46E5;
+  --color-brand-success: #10B981;
+  --color-brand-warning: #FBBF24;
+  --color-brand-danger: #EF4444;
   
-  --color-surface-bg: #FFFFFF;
+  --color-surface-bg: #F8F9FA; /* Ceramic White */
   --color-surface-card: #FFFFFF;
-  --color-surface-muted: #F8FAFC;
+  --color-surface-muted: #F1F5F9;
   
   --color-text-main: #0F172A;
-  --color-text-body: #475569;
-  --color-text-muted: #94A3B8;
+  --color-text-body: #334155;
+  --color-text-muted: #64748B;
 }
 
 :root {
-  --background: #FFFFFF;
+  --background: #F8F9FA;
   --foreground: #0F172A;
   color-scheme: light;
 }
@@ -29,34 +28,29 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans); /* Default to Sans for efficiency */
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Typography Layering: Serif for Brand, Sans for Function */
 h1, h2, .font-serif {
   font-family: var(--font-serif);
 }
 
 /* 2026 Diffused Shadows */
 .shadow-soft {
-  shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.01);
 }
 
 .shadow-float {
-  shadow: 0 20px 50px -12px rgba(79, 70, 229, 0.15);
+  box-shadow: 0 20px 50px -12px rgba(79, 70, 229, 0.12);
 }
 
-/* Utility Animations */
-@keyframes breathe {
-  0%, 100% { border-color: rgba(79, 70, 229, 0.2); }
-  50% { border-color: rgba(79, 70, 229, 0.6); }
+/* Noise Texture Layer */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-.animate-breathe {
-  animation: breathe 3s infinite ease-in-out;
-}
-
-.spotlight-overlay {
-  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+::selection {
+  background-color: #E0E7FF;
+  color: #312E81;
 }
