@@ -8,8 +8,9 @@
 }
 
 :root {
-  --background: #fafafa;
+  --background: #ffffff;
   --foreground: #18181b;
+  color-scheme: light;
 }
 
 body {
@@ -18,4 +19,12 @@ body {
   font-family: var(--font-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force light mode even if system is dark */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #18181b;
+  }
 }
