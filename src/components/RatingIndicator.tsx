@@ -16,7 +16,19 @@ const RatingIndicator: React.FC<RatingIndicatorProps> = ({ rating, label }) => {
       icon: <ShieldCheck className="h-3 w-3" />,
       border: 'border-green-200'
     },
+    'Very Low': {
+      bg: 'bg-green-100',
+      text: 'text-green-700',
+      icon: <ShieldCheck className="h-3 w-3" />,
+      border: 'border-green-200'
+    },
     Yellow: {
+      bg: 'bg-yellow-100',
+      text: 'text-yellow-700',
+      icon: <Shield className="h-3 w-3" />,
+      border: 'border-yellow-200'
+    },
+    Medium: {
       bg: 'bg-yellow-100',
       text: 'text-yellow-700',
       icon: <Shield className="h-3 w-3" />,
@@ -28,9 +40,15 @@ const RatingIndicator: React.FC<RatingIndicatorProps> = ({ rating, label }) => {
       icon: <ShieldAlert className="h-3 w-3" />,
       border: 'border-red-200'
     },
+    High: {
+      bg: 'bg-red-100',
+      text: 'text-red-700',
+      icon: <ShieldAlert className="h-3 w-3" />,
+      border: 'border-red-200'
+    },
   };
 
-  const config = configs[rating];
+  const config = configs[rating as keyof typeof configs] || configs.Yellow;
 
   return (
     <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded border ${config.border} ${config.bg}`}>

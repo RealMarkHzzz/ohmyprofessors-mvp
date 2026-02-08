@@ -7,6 +7,7 @@ import EmailOptIn from '@/components/EmailOptIn';
 import LiveFeed from '@/components/LiveFeed';
 import BackgroundAmbient from '@/components/BackgroundAmbient';
 import { useI18n } from '@/components/I18nContext';
+import { Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
@@ -19,17 +20,14 @@ export default function Home() {
       {/* 2026 Ambient Intelligence Layer */}
       <BackgroundAmbient />
 
-      {/* 
-        Cinematic Dimming Overlay 
-        z-index: 900 (High, but below Search Hub)
-      */}
+      {/* Cinematic Dimming Overlay */}
       <AnimatePresence>
         {isSearchFocused && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-zinc-900/40 backdrop-blur-md z-[900] pointer-events-none"
+            className="fixed inset-0 bg-white/60 backdrop-blur-[4px] z-[900] pointer-events-none"
           />
         )}
       </AnimatePresence>
@@ -72,25 +70,18 @@ export default function Home() {
       </div>
 
       <div className="relative w-full flex flex-col items-center">
-        {/* 
-          Block 3: The "Absolute Center" Hub 
-          z-index: 1000 (Highest - must be above dimming overlay)
-        */}
+        {/* Block 3: The "Absolute Center" Hub */}
         <section className="relative w-full h-screen flex flex-col items-center px-6 z-[1000]">
           
-          {/* 
-            Optical Center Adjustment:
-            - Desktop (md): 40% from top (slight upwards shift)
-            - Mobile: 60% from top (Thumb-Zone Optimization / 40% from bottom)
-          */}
-          <div className="absolute top-[60%] md:top-[40%] -translate-y-1/2 w-full flex flex-col items-center gap-8 md:gap-12">
+          {/* Static container for positioning at 40% - ADDED z-[1000] TO FORCE CLEARNESS */}
+          <div className="absolute top-[40%] -translate-y-1/2 w-full flex flex-col items-center gap-8 md:gap-12 z-[1000]">
             
             {/* HERO - This FADES on search focus */}
             <motion.div 
               animate={{ 
-                opacity: isSearchFocused ? 0.2 : 1,
+                opacity: isSearchFocused ? 0.3 : 1,
                 scale: isSearchFocused ? 0.95 : 1,
-                filter: isSearchFocused ? 'blur(4px)' : 'blur(0px)'
+                filter: isSearchFocused ? 'blur(2px)' : 'blur(0px)'
               }}
               transition={{ duration: 0.6 }}
               className="w-full"
@@ -98,8 +89,8 @@ export default function Home() {
               <Hero />
             </motion.div>
             
-            {/* SEARCH BAR - Isolated from blur effects */}
-            <div className="w-full flex flex-col items-center gap-8 relative">
+            {/* SEARCH BAR - This stays BRIGHT and high z-index */}
+            <div className="w-full flex flex-col items-center gap-8 relative z-[1100]">
               <SearchBar onFocusChange={setIsSearchFocused} />
               
               <motion.div 
