@@ -16,11 +16,11 @@ export default function Home() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center justify-start bg-[#F8F9FA] selection:bg-indigo-50 selection:text-indigo-900">
+    <main className="relative min-h-screen flex flex-col items-center justify-start bg-[#F8F9FA] selection:bg-indigo-50 selection:text-indigo-900 overflow-x-hidden">
       {/* 2026 Ambient Intelligence Layer */}
       <BackgroundAmbient />
 
-      {/* Cinematic Dimming Overlay - Smoother and deeper */}
+      {/* Cinematic Dimming Overlay */}
       <AnimatePresence>
         {isSearchFocused && (
           <motion.div 
@@ -70,42 +70,45 @@ export default function Home() {
       </div>
 
       <div className="relative w-full flex flex-col items-center">
-        {/* Block 3: The "Absolute Center" Hub - Recalculated for Optical Center (40%-50%) */}
-        <section className="w-full flex flex-col items-center justify-start h-screen px-6 pt-[12vh] md:pt-[18vh]">
+        {/* 
+          Block 3: The "Absolute Center" Hub 
+          RE-ENGINEERED: Using absolute vertical positioning to force 40% offset 
+        */}
+        <section className="relative w-full h-screen flex flex-col items-center px-6">
           <motion.div 
             animate={{ 
-              y: isSearchFocused ? -60 : 0,
+              y: isSearchFocused ? '-15vh' : '0vh',
               opacity: isSearchFocused ? 0.3 : 1,
-              scale: isSearchFocused ? 0.92 : 1,
-              filter: isSearchFocused ? 'blur(2px)' : 'blur(0px)'
+              scale: isSearchFocused ? 0.9 : 1
             }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-16 md:mb-20"
+            className="absolute top-[40%] -translate-y-1/2 w-full flex flex-col items-center gap-8 md:gap-12"
           >
             <Hero />
-          </motion.div>
-          
-          <div className="w-full flex flex-col items-center gap-12 relative">
-            <SearchBar onFocusChange={setIsSearchFocused} />
             
-            <motion.div 
-              animate={{ opacity: isSearchFocused ? 0 : 1 }}
-              className="flex flex-wrap justify-center gap-4"
-            >
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-300">Popular:</span>
-              {['COMP10001', 'BUSS1000', 'PSYC1001'].map(code => (
-                <button key={code} className="bg-white border border-zinc-100 px-3 py-1 rounded-md text-[10px] font-bold text-zinc-400 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm">
-                  {code}
-                </button>
-              ))}
-            </motion.div>
-          </div>
+            <div className="w-full flex flex-col items-center gap-8 relative">
+              <SearchBar onFocusChange={setIsSearchFocused} />
+              
+              <motion.div 
+                animate={{ opacity: isSearchFocused ? 0 : 1 }}
+                className="flex flex-wrap justify-center gap-4"
+              >
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-300">Popular:</span>
+                {['COMP10001', 'BUSS1000', 'PSYC1001'].map(code => (
+                  <button key={code} className="bg-white border border-zinc-100 px-3 py-1 rounded-md text-[10px] font-bold text-zinc-400 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm">
+                    {code}
+                  </button>
+                ))}
+              </motion.div>
+            </div>
+          </motion.div>
 
+          {/* Scroll Indicator */}
           <motion.div 
             animate={{ opacity: isSearchFocused ? 0 : 0.2 }}
-            className="mt-auto mb-10 flex flex-col items-center gap-2"
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           >
-            <span className="text-[8px] font-black uppercase tracking-[0.4em] text-zinc-900 font-sans">Scroll for Intelligence</span>
+            <span className="text-[8px] font-black uppercase tracking-[0.4em] text-zinc-900 font-sans">Scroll</span>
             <div className="h-12 w-px bg-gradient-to-b from-zinc-900 to-transparent" />
           </motion.div>
         </section>
@@ -117,7 +120,7 @@ export default function Home() {
           {/* Block 4: Intelligence Grid */}
           <section className="w-full py-32 flex flex-col items-center gap-24">
             <div className="text-center px-6">
-              <h2 className="text-5xl md:text-8xl font-serif font-black tracking-tighter text-zinc-900 italic mb-6">Database.</h2>
+              <h2 className="text-5xl md:text-8xl font-serif font-black tracking-tighter text-zinc-900 italic mb-6 text-left md:text-center">Database.</h2>
               <p className="text-zinc-400 font-sans text-[10px] font-black uppercase tracking-[0.5em]">Peer-verified academic survival data</p>
             </div>
             <HeroCards />

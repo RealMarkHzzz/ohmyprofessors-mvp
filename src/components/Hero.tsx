@@ -29,26 +29,26 @@ const Hero = () => {
 
   return (
     <div ref={containerRef} className="flex flex-col items-center text-center px-4 max-w-5xl mx-auto relative">
-      {/* 1. Structural Fix: Independent vertical space for badge */}
-      <div className="hero-badge mb-10 inline-flex items-center gap-2 rounded-full bg-indigo-50/80 border border-indigo-100 px-5 py-2.5 backdrop-blur-sm shadow-sm">
+      {/* 1. Structural Fix: Badge is now definitely above and spaced */}
+      <div className="hero-badge mb-12 inline-flex items-center gap-2 rounded-full bg-indigo-50 border border-indigo-100 px-5 py-2">
         <TrendingUp className="h-3.5 w-3.5 text-indigo-600" />
-        <span className="text-[11px] font-black uppercase tracking-[0.15em] text-indigo-600 font-sans">
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-600 font-sans">
           50,000+ Verified Reviews Active
         </span>
       </div>
       
       <div className="relative inline-block">
-        <h1 className="hero-title mb-8 text-6xl md:text-[110px] font-serif font-black tracking-tight text-zinc-900 leading-[0.9]">
+        <h1 className="hero-title mb-6 text-5xl md:text-8xl font-serif font-black tracking-tight text-zinc-900 leading-[1.0]">
           {t.title} <br />
           <span className="text-indigo-600 relative inline-block mt-2">
             {t.subtitle} <GpaRollingNumber target={7.0} />
             
-            {/* GPA Shield Visualizer */}
-            <div className="gpa-shield absolute -right-16 md:-right-24 top-0 md:-top-6 hidden sm:block pointer-events-none">
-              <div className="relative flex h-16 w-16 md:h-28 md:w-28 items-center justify-center rounded-[2rem] bg-indigo-600 text-white shadow-float rotate-12">
-                <ShieldCheck className="h-8 w-8 md:h-14 md:w-14" />
-                <div className="absolute -bottom-2 -right-2 h-8 w-8 md:h-10 md:w-10 rounded-full bg-brand-success border-4 border-white flex items-center justify-center shadow-lg">
-                  <span className="text-[10px] md:text-xs font-black text-white">7.0</span>
+            {/* GPA Shield Visualizer - Reduced size to prevent overlap */}
+            <div className="gpa-shield absolute -right-12 md:-right-16 top-0 md:-top-4 hidden sm:block pointer-events-none">
+              <div className="relative flex h-14 w-14 md:h-20 md:w-24 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-float rotate-12">
+                <ShieldCheck className="h-6 w-6 md:h-10 md:w-10" />
+                <div className="absolute -bottom-1 -right-1 h-6 w-6 md:h-8 md:w-8 rounded-full bg-brand-success border-2 border-white flex items-center justify-center">
+                  <span className="text-[8px] md:text-[10px] font-black text-white">7.0</span>
                 </div>
               </div>
             </div>
@@ -56,7 +56,7 @@ const Hero = () => {
         </h1>
       </div>
       
-      <p className="hero-desc mt-4 text-lg md:text-2xl font-serif text-zinc-500 max-w-2xl mx-auto leading-relaxed italic opacity-80">
+      <p className="hero-desc mt-6 text-base md:text-xl font-serif text-zinc-500 max-w-xl mx-auto leading-relaxed italic opacity-70">
         &ldquo;{t.desc}&rdquo;
       </p>
     </div>
