@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Intelligence Dashboard | Oh My Professors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #4F46E5;
+            --color-background: #F9FAFB;
+            --color-text: #111827;
+        }
+        body {
+            font-family: 'Crimson Text', serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+        h1, h2, h3, h4 {
+            font-family: 'EB Garamond', serif;
+        }
+        .dashboard-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .risk-gauge-bg {
+            fill: none;
+            stroke: #E5E7EB;
+            stroke-width: 12;
+        }
+        .risk-gauge-fill {
+            fill: none;
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1.5s ease-in-out;
+        }
+        .bar-container {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+        }
+        .bar {
+            flex: 1;
+            background: var(--color-primary);
+            border-radius: 4px 4px 0 0;
+            transition: height 1s ease-out;
+            position: relative;
+        }
+        .bar:hover {
+            opacity: 0.8;
+        }
+        .bar::after {
+            content: attr(data-value) '%';
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <nav class="bg-white border-b px-4 py-4 mb-8">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <button onclick="history.back()" class="flex items-center text-indigo-600 font-bold">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                Back to Results
+            </button>
+            <div class="font-bold text-xl">Intelligence Dashboard</div>
+            <div class="w-10"></div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 pb-12">
+        <div id="content" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left: Profile Header -->
+            <div class="lg:col-span-3">
+                <div class="flex flex-col md:flex-row md:items-center gap-6 mb-8">
+                    <div class="w-24 h-24 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-4xl font-bold" id="prof-initial">
+                        SJ
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-extrabold mb-1" id="prof-name">Dr. Sarah Jenkins</h1>
+                        <p class="text-xl text-gray-500" id="prof-title">Senior Lecturer in Computer Science</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="font-bold text-indigo-600 uppercase tracking-wider" id="prof-uni">University of Melbourne</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle: Main Dashboard -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Intelligence Summary -->
+                <div class="dashboard-card bg-indigo-900 text-white">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-indigo-300 mb-4">Core Intelligence</h3>
+                    <p class="text-2xl leading-relaxed italic" id="prof-sentiment">
+                        "该教授给分慷慨，但作业量大。适合想学到真本事且不怕熬夜的学生。"
+                    </p>
+                </div>
+
+                <!-- Detailed Summary -->
+                <div class="dashboard-card">
+                    <h3 class="text-xl font-bold mb-4">Academic Profile</h3>
+                    <p class="text-gray-600 leading-relaxed text-lg" id="prof-summary">
+                        Sarah is known for her deep industry knowledge in AI. While her assignments are time-consuming, the grading criteria are clear and she often awards high marks to those who put in the effort.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-3" id="prof-tags">
+                        <!-- Tags injected -->
+                    </div>
+                </div>
+
+                <!-- Subjects -->
+                <div class="dashboard-card">
+                    <h3 class="text-xl font-bold mb-4">Teaching Subjects</h3>
+                    <div class="space-y-4" id="prof-subjects">
+                        <!-- Subjects injected -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Risk & Stats -->
+            <div class="space-y-8">
+                <!-- GPA Risk Gauge -->
+                <div class="dashboard-card text-center">
+                    <h3 class="text-lg font-bold mb-6">GPA Risk Index</h3>
+                    <div class="relative w-48 h-48 mx-auto">
+                        <svg viewBox="0 0 100 100" class="transform -rotate-90">
+                            <circle cx="50" cy="50" r="40" class="risk-gauge-bg"></circle>
+                            <circle cx="50" cy="50" r="40" class="risk-gauge-fill" id="risk-gauge"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-4xl font-black" id="risk-percent">0%</span>
+                            <span class="text-xs font-bold uppercase text-gray-400" id="risk-label">Low Risk</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-6 px-4">Based on 150+ student historical grade distributions.</p>
+                </div>
+
+                <!-- Grade Distribution -->
+                <div class="dashboard-card">
+                    <h3 class="text-lg font-bold mb-6">Grade Distribution</h3>
+                    <div class="bar-container mb-4" id="distribution-chart">
+                        <!-- Bars injected -->
+                    </div>
+                    <div class="flex justify-between text-xs font-bold text-gray-400 px-1">
+                        <span>F</span>
+                        <span>D</span>
+                        <span>C</span>
+                        <span>B</span>
+                        <span>A</span>
+                    </div>
+                </div>
+
+                <!-- Action -->
+                <button class="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold text-lg transition-all transform hover:-translate-y-1 shadow-lg">
+                    Track this Professor
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/data.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const profId = urlParams.get('id') || 'sarah-jenkins';
+        const prof = mockData.professors.find(p => p.id === profId);
+
+        function init() {
+            if (!prof) return;
+
+            // Header
+            document.getElementById('prof-name').innerText = prof.name;
+            document.getElementById('prof-title').innerText = prof.title;
+            document.getElementById('prof-uni').innerText = prof.university;
+            document.getElementById('prof-initial').innerText = prof.name.split(' ').map(n => n[0]).join('').slice(-2);
+            
+            // Intelligence
+            document.getElementById('prof-sentiment').innerText = `"${prof.sentiment}"`;
+            document.getElementById('prof-summary').innerText = prof.summary;
+            
+            // Tags
+            const tagsContainer = document.getElementById('prof-tags');
+            prof.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'px-4 py-2 bg-gray-100 rounded-lg text-sm font-bold text-gray-600';
+                span.innerText = tag;
+                tagsContainer.appendChild(span);
+            });
+
+            // Subjects
+            const subjectsContainer = document.getElementById('prof-subjects');
+            prof.subjects.forEach(sub => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-xl';
+                div.innerHTML = `
+                    <span class="font-bold">${sub}</span>
+                    <span class="text-xs bg-white px-2 py-1 rounded border">Active</span>
+                `;
+                subjectsContainer.appendChild(div);
+            });
+
+            // Risk Gauge
+            const gauge = document.getElementById('risk-gauge');
+            const percentText = document.getElementById('risk-percent');
+            const labelText = document.getElementById('risk-label');
+            
+            const radius = 40;
+            const circumference = 2 * Math.PI * radius;
+            gauge.style.strokeDasharray = `${circumference} ${circumference}`;
+            gauge.style.strokeDashoffset = circumference;
+            
+            const riskValue = prof.gpaRiskValue;
+            const riskColor = riskValue > 70 ? '#EF4444' : riskValue > 40 ? '#F59E0B' : '#10B981';
+            gauge.style.stroke = riskColor;
+            
+            // Distribution Chart
+            const chart = document.getElementById('distribution-chart');
+            prof.distribution.forEach((val, i) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.setAttribute('data-value', val);
+                bar.style.height = '0%';
+                chart.appendChild(bar);
+            });
+
+            // Entry Animations with GSAP
+            gsap.from(".dashboard-card", {
+                opacity: 0,
+                y: 30,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "power3.out"
+            });
+
+            // Animate Gauge
+            setTimeout(() => {
+                const offset = circumference - (riskValue / 100) * circumference;
+                gauge.style.strokeDashoffset = offset;
+                
+                let start = 0;
+                const interval = setInterval(() => {
+                    if(start >= riskValue) clearInterval(interval);
+                    percentText.innerText = `${start}%`;
+                    start++;
+                }, 20);
+                
+                labelText.innerText = prof.gpaRisk + ' Risk';
+                labelText.style.color = riskColor;
+            }, 500);
+
+            // Animate Chart
+            setTimeout(() => {
+                const bars = document.querySelectorAll('.bar');
+                bars.forEach((bar, i) => {
+                    bar.style.height = prof.distribution[i] + '%';
+                });
+            }, 800);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
