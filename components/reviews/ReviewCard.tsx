@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Review } from '@/lib/types'
 import { POSITIVE_TAGS, NEGATIVE_TAGS, NEUTRAL_TAGS, type ReviewTag } from '@/lib/validations'
 import { Star, ThumbsUp, Calendar, BookOpen, TrendingUp } from 'lucide-react'
@@ -32,6 +33,31 @@ function TagBadge({ tag }: { tag: string }) {
 
 export function ReviewCard({ review }: ReviewCardProps) {
   const timeAgo = formatDistanceToNow(new Date(review.created_at))
+  const [helpfulCount, setHelpfulCount] = useState(review.helpful_count)
+  const [isHelpful, setIsHelpful] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleHelpful = async () => {
+    if (isHelpful || isLoading) return
+
+    setIsLoading(true)
+    try {
+      const response = await fetch(`/api/reviews/${review.id}/helpful`, {
+        method: 'PATCH',
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setHelpfulCount(result.review.helpful_count)
+        setIsHelpful(true)
+      }
+    } catch (error) {
+      console.error('Failed to mark as helpful:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
@@ -127,11 +153,24 @@ export function ReviewCard({ review }: ReviewCardProps) {
 
       {/* Footer - Helpful Button */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-        <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors">
-          <ThumbsUp className="w-4 h-4" />
-          <span>Helpful</span>
-          {review.helpful_count > 0 && (
-            <span className="text-gray-500">({review.helpful_count})</span>
+        <button 
+          onClick={handleHelpful}
+          disabled={isHelpful || isLoading}
+          className={`
+            flex items-center gap-2 text-sm transition-all duration-150
+            ${isHelpful 
+              ? 'text-blue-600 cursor-default' 
+              : 'text-gray-600 hover:text-blue-600 cursor-pointer'
+            }
+            ${isLoading && 'opacity-50 cursor-wait'}
+          `}
+        >
+          <ThumbsUp className={`w-4 h-4 ${isHelpful ? 'fill-blue-600' : ''}`} />
+          <span>{isHelpful ? 'Marked as Helpful' : 'Helpful'}</span>
+          {helpfulCount > 0 && (
+            <span className={isHelpful ? 'text-blue-600 font-medium' : 'text-gray-500'}>
+              ({helpfulCount})
+            </span>
           )}
         </button>
 

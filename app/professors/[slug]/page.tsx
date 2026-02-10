@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
 import { getProfessorBySlug } from '@/lib/data/mock-professors'
@@ -9,6 +9,7 @@ import { getRatingDistributionPercent } from '@/lib/search-utils'
 import { ArrowLeft, Star, Mail, BookOpen, TrendingUp, Users, ThumbsUp } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ReviewCard } from '@/components/reviews/ReviewCard'
+import { ReviewForm } from '@/components/reviews/ReviewForm'
 import gsap from 'gsap'
 
 interface ProfessorPageProps {
@@ -20,6 +21,10 @@ interface ProfessorPageProps {
 export default function ProfessorPage({ params }: ProfessorPageProps) {
   const router = useRouter()
   const professor = getProfessorBySlug(params.slug)
+  const [showReviewForm, setShowReviewForm] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
+  
+  // Re-fetch reviews on refresh
   const reviews = professor ? getReviewsByProfessorId(professor.id) : []
   const ratingDist = professor ? getRatingDistribution(professor.id) : {}
   const ratingPercent = getRatingDistributionPercent(ratingDist)
@@ -28,6 +33,7 @@ export default function ProfessorPage({ params }: ProfessorPageProps) {
   const headerRef = useRef<HTMLDivElement>(null)
   const statsRef = useRef<HTMLDivElement>(null)
   const reviewsRef = useRef<HTMLDivElement>(null)
+  const formRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (professor) {
@@ -85,6 +91,26 @@ export default function ProfessorPage({ params }: ProfessorPageProps) {
   const wouldTakeAgainPercent = reviews.length > 0
     ? Math.round((reviews.filter(r => r.would_take_again).length / reviews.length) * 100)
     : 0
+
+  const handleReviewSuccess = () => {
+    // Refresh reviews list
+    setRefreshKey(prev => prev + 1)
+    setShowReviewForm(false)
+    
+    // Scroll to reviews section
+    if (reviewsRef.current) {
+      reviewsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+  const scrollToForm = () => {
+    setShowReviewForm(true)
+    setTimeout(() => {
+      if (formRef.current) {
+        formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 100)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -233,9 +259,14 @@ export default function ProfessorPage({ params }: ProfessorPageProps) {
             <h2 className="text-2xl font-bold text-gray-900">
               Student Reviews ({reviews.length})
             </h2>
-            <Button className="bg-blue-600 hover:bg-blue-700">
-              Write a Review
-            </Button>
+            {!showReviewForm && (
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700"
+                onClick={scrollToForm}
+              >
+                Write a Review
+              </Button>
+            )}
           </div>
 
           {reviews.length === 0 ? (
@@ -247,18 +278,33 @@ export default function ProfessorPage({ params }: ProfessorPageProps) {
               <p className="text-gray-600 mb-6">
                 Be the first to share your experience with {professor.name}!
               </p>
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700"
+                onClick={scrollToForm}
+              >
                 Write the First Review
               </Button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4" key={refreshKey}>
               {reviews.map((review) => (
                 <ReviewCard key={review.id} review={review} />
               ))}
             </div>
           )}
         </div>
+
+        {/* Review Form Section */}
+        {showReviewForm && (
+          <div ref={formRef} className="mt-8">
+            <ReviewForm
+              professorId={professor.id}
+              professorName={professor.name}
+              onSuccess={handleReviewSuccess}
+              onCancel={() => setShowReviewForm(false)}
+            />
+          </div>
+        )}
 
         {/* Review Guidelines */}
         <div className="bg-blue-50 rounded-lg p-6 border border-blue-200 mt-6">
