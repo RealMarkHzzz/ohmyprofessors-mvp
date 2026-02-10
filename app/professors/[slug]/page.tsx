@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
 import { getProfessorBySlug } from '@/lib/data/mock-professors'
@@ -13,14 +13,15 @@ import { ReviewForm } from '@/components/reviews/ReviewForm'
 import gsap from 'gsap'
 
 interface ProfessorPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export default function ProfessorPage({ params }: ProfessorPageProps) {
   const router = useRouter()
-  const professor = getProfessorBySlug(params.slug)
+  const { slug } = use(params)
+  const professor = getProfessorBySlug(slug)
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
   
