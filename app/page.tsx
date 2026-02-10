@@ -1,26 +1,39 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { ProfessorCard } from '@/components/shared/ProfessorCard'
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
+import { animatePageEntry, animateProfessorList } from '@/lib/animations/gsap-animations'
 
 interface Professor {
   id: string
   name: string
   department: string
   email: string
+  slug: string
 }
 
 export default function Home() {
+  const router = useRouter()
   const [professors, setProfessors] = useState<Professor[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
+
+  // Animation refs
+  const headerRef = useRef<HTMLElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null)
+  const searchBarRef = useRef<HTMLDivElement>(null)
+  const statsRef = useRef<HTMLDivElement>(null)
+  const professorListRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function loadProfessors() {
       const supabase = createClient()
       const { data, error } = await supabase
         .from('professors')
-        .select('id, name, department, email')
+        .select('id, name, department, email, slug')
         .order('name')
 
       if (error) {
@@ -39,10 +52,50 @@ export default function Home() {
     prof.department.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  // Page entry animation
+  useEffect(() => {
+    if (!loading) {
+      const timeline = animatePageEntry({
+        header: headerRef.current,
+        hero: heroRef.current,
+        searchBar: searchBarRef.current,
+        stats: statsRef.current,
+        professorList: professorListRef.current,
+      })
+
+      return () => {
+        timeline.kill()
+      }
+    }
+    return undefined
+  }, [loading])
+
+  // Professor list stagger animation
+  useEffect(() => {
+    if (!loading && professorListRef.current) {
+      const cards = professorListRef.current.querySelectorAll<HTMLElement>('[data-professor-card]')
+      if (cards.length > 0) {
+        animateProfessorList(Array.from(cards))
+      }
+    }
+  }, [loading, filteredProfessors.length])
+
+  const handleProfessorClick = (slug: string) => {
+    router.push(`/professors/${slug}`)
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner message="Loading professors..." />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm">
+      <header ref={headerRef} className="border-b bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <h1 className="text-3xl font-bold text-gray-900">
             🎓 OhMyProfessors
@@ -56,7 +109,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-12">
         {/* Hero Section */}
-        <div className="text-center mb-12">
+        <div ref={heroRef} className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Find the Best Professors
           </h2>
@@ -65,19 +118,19 @@ export default function Home() {
           </p>
 
           {/* Search Bar */}
-          <div className="max-w-2xl mx-auto">
+          <div ref={searchBarRef} className="max-w-2xl mx-auto">
             <input
               type="text"
               placeholder="Search professors by name or department..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-full focus:outline-none focus:border-blue-500 shadow-lg"
+              className="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-full focus:outline-none focus:border-blue-500 shadow-lg transition-colors"
             />
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white rounded-lg shadow p-6 text-center">
             <div className="text-3xl font-bold text-blue-600">{professors.length}</div>
             <div className="text-gray-600 mt-2">Professors</div>
@@ -98,38 +151,20 @@ export default function Home() {
             Available Professors
           </h3>
 
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-              <p className="text-gray-600 mt-4">Loading professors...</p>
-            </div>
-          ) : filteredProfessors.length === 0 ? (
+          {filteredProfessors.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-600 text-lg">
                 {searchQuery ? 'No professors found matching your search.' : 'No professors available yet.'}
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div ref={professorListRef} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredProfessors.map((prof) => (
-                <div
-                  key={prof.id}
-                  className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
-                >
-                  <h4 className="text-xl font-semibold text-gray-900 mb-2">
-                    {prof.name}
-                  </h4>
-                  <p className="text-gray-600 mb-1">
-                    📚 {prof.department}
-                  </p>
-                  <p className="text-gray-500 text-sm">
-                    ✉️ {prof.email}
-                  </p>
-                  <div className="mt-4">
-                    <span className="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">
-                      No reviews yet
-                    </span>
-                  </div>
+                <div key={prof.id} data-professor-card>
+                  <ProfessorCard
+                    {...prof}
+                    onClick={() => handleProfessorClick(prof.slug)}
+                  />
                 </div>
               ))}
             </div>
