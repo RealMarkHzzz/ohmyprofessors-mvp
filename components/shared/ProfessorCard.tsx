@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { BookOpen, Mail, Star } from 'lucide-react'
 import { setupProfessorCardHover } from '@/lib/animations/gsap-animations'
 
@@ -74,7 +75,6 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export function ProfessorCard({
-  id,
   name,
   department,
   email,
@@ -112,10 +112,13 @@ export function ProfessorCard({
       <div className="flex items-start gap-4 mb-4">
         {/* Avatar */}
         {avatar_url && (
-          <img 
+          <Image 
             src={avatar_url} 
             alt={name}
+            width={64}
+            height={64}
             className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+            unoptimized
           />
         )}
         

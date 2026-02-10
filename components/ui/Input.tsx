@@ -1,18 +1,26 @@
 import React from 'react'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  // Add any custom props here
+  error?: boolean
+  helperText?: string
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className = '', type = 'text', ...props }, ref) => {
+  ({ className = '', type = 'text', error, helperText, ...props }, ref) => {
     return (
-      <input
-        ref={ref}
-        type={type}
-        className={`input ${className}`}
-        {...props}
-      />
+      <div className="w-full">
+        <input
+          ref={ref}
+          type={type}
+          className={`input ${error ? 'border-red-500 focus:ring-red-500' : ''} ${className}`}
+          {...props}
+        />
+        {helperText && (
+          <p className={`mt-1 text-sm ${error ? 'text-red-600' : 'text-gray-500'}`}>
+            {helperText}
+          </p>
+        )}
+      </div>
     )
   }
 )

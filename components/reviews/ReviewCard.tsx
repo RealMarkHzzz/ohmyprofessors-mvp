@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Review } from '@/lib/types'
 import { POSITIVE_TAGS, NEGATIVE_TAGS, NEUTRAL_TAGS, type ReviewTag } from '@/lib/validations'
-import { Star, ThumbsUp, Calendar, BookOpen, TrendingUp } from 'lucide-react'
+import { Star, ThumbsUp, Calendar, TrendingUp } from 'lucide-react'
 import { formatDistanceToNow } from '@/lib/utils'
 
 interface ReviewCardProps {

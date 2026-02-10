@@ -1,13 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { ProfessorCard } from '@/components/shared/ProfessorCard'
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
 import { getAllProfessors, getAllDepartments, getAllTags } from '@/lib/data/mock-professors'
 import { getAllReviews } from '@/lib/data/mock-reviews'
 import { searchAndFilterProfessors, type SortOption } from '@/lib/search-utils'
-import { Professor } from '@/lib/types'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { debounce } from '@/lib/utils'
@@ -28,9 +27,9 @@ export function ProfessorListClient() {
   const [sortBy, setSortBy] = useState<SortOption>('rating-desc')
   const [showFilters, setShowFilters] = useState(false)
 
-  // Debounced search handler
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
+  // Debounced search handler - using useMemo to avoid recreating on every render
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => {
       setSearchQuery(value)
     }, 300),
     []

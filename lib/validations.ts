@@ -75,7 +75,8 @@ export const reviewSchema = z.object({
   course_code: z.string()
     .min(1, 'Course code is required')
     .max(20, 'Course code must be 20 characters or less')
-    .regex(/^[A-Z]{2,4}\d{4}$/, 'Course code must be in format like CS2510 or MATH1120'),
+    .regex(/^[A-Z\s]{2,10}\d{4}$/, 'Course code format: COMP1234 or COMP SCI 1234')
+    .transform(val => val.replace(/\s+/g, ' ').trim()),
   course_name: z.string()
     .min(1, 'Course name is required')
     .max(200, 'Course name must be 200 characters or less'),
@@ -88,7 +89,7 @@ export const reviewSchema = z.object({
     .max(10, 'Select at most 10 tags'),
   semester: z.string()
     .min(1, 'Semester is required')
-    .regex(/^\d{4} Semester [12]$/, 'Semester must be in format like "2025 Semester 1"'),
+    .regex(/^(S1|S2|Semester\s[12])(,?\s)\d{4}$/, 'Semester format: S1 2024, Semester 1, 2024, or Semester 1 2024'),
   would_take_again: z.boolean(),
   attendance_mandatory: z.boolean(),
 });

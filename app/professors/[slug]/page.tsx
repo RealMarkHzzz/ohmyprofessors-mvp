@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
-import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
+import Image from 'next/image'
 import { getProfessorBySlug } from '@/lib/data/mock-professors'
 import { getReviewsByProfessorId, getRatingDistribution } from '@/lib/data/mock-reviews'
 import { getRatingDistributionPercent } from '@/lib/search-utils'
@@ -130,10 +130,13 @@ export default function ProfessorPage({ params }: ProfessorPageProps) {
           <div className="flex items-start gap-6">
             {/* Avatar */}
             {professor.avatar_url && (
-              <img 
+              <Image 
                 src={professor.avatar_url}
                 alt={professor.name}
+                width={128}
+                height={128}
                 className="w-32 h-32 rounded-full object-cover flex-shrink-0"
+                unoptimized
               />
             )}
             
