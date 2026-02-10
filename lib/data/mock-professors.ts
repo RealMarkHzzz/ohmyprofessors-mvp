@@ -581,3 +581,7 @@ export function getAllTags(): string[] {
   });
   return Array.from(tagsSet).sort();
 }
+
+// Ensure data is available in production
+export const professors = mockProfessors;
+export default mockProfessors;

@@ -427,3 +427,6 @@ export function getRatingDistribution(professorId: string): { [key: number]: num
   
   return distribution;
 }
+
+// Ensure data is available in production
+export default mockReviews;
