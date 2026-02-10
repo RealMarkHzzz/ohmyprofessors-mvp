@@ -19,7 +19,7 @@ export const reviewSchema = z.object({
     .string()
     .regex(/^\d{4}-\d{4}$/, "Academic year must be in format YYYY-YYYY"),
   semester: z.enum(["Fall", "Spring", "Summer", "Winter"], {
-    errorMap: () => ({ message: "Invalid semester" }),
+    message: "Invalid semester",
   }),
   
   // Ratings (1-5)
@@ -56,7 +56,7 @@ export const reviewSchema = z.object({
     .optional(),
   
   difficulty: z.enum(["easy", "medium", "hard", "very_hard"], {
-    errorMap: () => ({ message: "Invalid difficulty level" }),
+    message: "Invalid difficulty level",
   }),
   
   // Content
