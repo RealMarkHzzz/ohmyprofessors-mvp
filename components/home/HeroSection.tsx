@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { GraduationCap, Star } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
@@ -75,16 +76,16 @@ export function HeroSection() {
   }, [])
 
   return (
-    <section className="section bg-white dark:bg-gray-900 pt-24">
+    <section className="section bg-white pt-24">
       <div className="container-custom">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Content */}
           <div className="space-y-8">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-full">
-              <span className="text-xl">🎓</span>
-              <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full">
+              <GraduationCap className="w-5 h-5 text-blue-600" />
+              <span className="text-xs text-gray-600 font-medium">
                 Trusted by 10,000+ Students
               </span>
             </div>
@@ -92,7 +93,7 @@ export function HeroSection() {
             {/* Heading */}
             <h1 
               ref={sloganRef}
-              className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-gray-100"
+              className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900"
             >
               Find Your Perfect{' '}
               <span className="gradient-text">Professor</span>
@@ -101,7 +102,7 @@ export function HeroSection() {
             {/* Description */}
             <p 
               ref={subtitleRef}
-              className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
+              className="text-lg text-gray-600 leading-relaxed"
             >
               Real student reviews and ratings to help you make informed decisions about your courses and professors.
             </p>
@@ -126,10 +127,10 @@ export function HeroSection() {
                   OP
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-900 dark:text-gray-100">
+                  <div className="font-semibold text-gray-900">
                     OhMyProfessors Search
                   </div>
-                  <div className="text-sm text-green-500 dark:text-green-400">
+                  <div className="text-sm text-green-500">
                     Ready to help
                   </div>
                 </div>
@@ -146,14 +147,14 @@ export function HeroSection() {
               
               {/* Trending Tags */}
               <div ref={tagsRef} className="space-y-3">
-                <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                <span className="text-xs text-gray-500 font-medium">
                   Popular searches:
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {TRENDING_TAGS.map((tag) => (
                     <button
                       key={tag}
-                      className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-medium rounded-full transition-colors duration-200 border border-gray-200 dark:border-gray-700"
+                      className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-full transition-colors duration-200 border border-gray-200"
                     >
                       {tag}
                     </button>
@@ -163,25 +164,26 @@ export function HeroSection() {
               
               {/* Sample Results */}
               <div className="mt-6 space-y-3">
-                <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                <div className="text-xs text-gray-500 font-medium">
                   Recent reviews:
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm">
                     <div className="flex text-yellow-400">
-                      {'★★★★★'.split('').map((star, i) => (
-                        <span key={i}>{star}</span>
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-400" />
                       ))}
                     </div>
-                    <span className="text-gray-700 dark:text-gray-300">Prof. Smith - CS101</span>
+                    <span className="text-gray-700">Prof. Smith - CS101</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <div className="flex text-yellow-400">
-                      {'★★★★☆'.split('').map((star, i) => (
-                        <span key={i}>{star}</span>
+                      {[1, 2, 3, 4].map((i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-400" />
                       ))}
+                      <Star className="w-4 h-4" />
                     </div>
-                    <span className="text-gray-700 dark:text-gray-300">Dr. Johnson - MATH201</span>
+                    <span className="text-gray-700">Dr. Johnson - MATH201</span>
                   </div>
                 </div>
               </div>

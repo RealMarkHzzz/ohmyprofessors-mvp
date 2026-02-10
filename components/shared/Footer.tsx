@@ -1,13 +1,15 @@
+import { GraduationCap, Heart } from 'lucide-react'
+
 export const Footer = () => {
   return (
-    <footer className="bg-gray-900 dark:bg-black text-gray-400">
+    <footer className="bg-gray-900 text-gray-400">
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           
           {/* Logo and Description */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">🎓</span>
+              <GraduationCap className="w-6 h-6 text-blue-600" />
               <span className="font-heading font-bold text-lg text-white">
                 OhMyProfessors
               </span>
@@ -79,8 +81,8 @@ export const Footer = () => {
             <p className="text-sm">
               © 2027 OhMyProfessors. All rights reserved.
             </p>
-            <p className="text-sm">
-              Made with ❤️ for students at University of Adelaide
+            <p className="text-sm flex items-center gap-1">
+              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> for students at University of Adelaide
             </p>
           </div>
         </div>

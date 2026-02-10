@@ -81,29 +81,29 @@ export function ProfessorListClient() {
     <>
       {/* Stats */}
       <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{professors.length}</div>
-          <div className="text-gray-600 dark:text-gray-400 mt-2">Professors</div>
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
+          <div className="text-3xl font-bold text-blue-600">{professors.length}</div>
+          <div className="text-gray-600 mt-2">Professors</div>
         </div>
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-green-600 dark:text-green-400">1</div>
-          <div className="text-gray-600 dark:text-gray-400 mt-2">University</div>
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
+          <div className="text-3xl font-bold text-green-600">1</div>
+          <div className="text-gray-600 mt-2">University</div>
         </div>
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">0</div>
-          <div className="text-gray-600 dark:text-gray-400 mt-2">Reviews</div>
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
+          <div className="text-3xl font-bold text-purple-600">0</div>
+          <div className="text-gray-600 mt-2">Reviews</div>
         </div>
       </div>
 
       {/* Professor List */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-        <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+      <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+        <h3 className="text-2xl font-bold mb-6 text-gray-900">
           Available Professors
         </h3>
 
         {professors.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400 text-lg">
+            <p className="text-gray-600 text-lg">
               No professors available yet.
             </p>
           </div>

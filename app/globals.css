@@ -4,7 +4,7 @@
 @import "tailwindcss";
 
 /* ========================================
-   CSS Variables - Light/Dark Mode Support
+   CSS Variables - Light Mode Only
    ======================================== */
 :root {
   /* Primary Colors */
@@ -33,32 +33,6 @@
   /* Legacy variables for compatibility */
   --background: #ffffff;
   --foreground: #171717;
-}
-
-.dark {
-  /* Primary - Keep same in dark mode */
-  --primary: #6366F1;
-  --primary-dark: #4F46E5;
-  --primary-light: #3730A3;
-  
-  /* Background */
-  --bg: #0F172A;
-  --bg-white: #1E293B;
-  --bg-gray-50: #334155;
-  
-  /* Text */
-  --text: #F8FAFC;
-  --text-muted: #94A3B8;
-  --text-gray-700: #CBD5E1;
-  --text-gray-600: #E2E8F0;
-  
-  /* Border */
-  --border: rgba(255, 255, 255, 0.1);
-  --border-gray-300: rgba(255, 255, 255, 0.2);
-  
-  /* Legacy */
-  --background: #0a0a0a;
-  --foreground: #ededed;
 }
 
 /* ========================================
@@ -166,16 +140,6 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #D1D5DB;
 }
 
-.dark .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #F8FAFC;
-}
-
-.dark .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
 /* Button Ghost */
 .btn-ghost {
   padding-left: 1rem;
@@ -191,14 +155,6 @@ h1, h2, h3, h4, h5, h6 {
   color: #111827;
 }
 
-.dark .btn-ghost {
-  color: #9CA3AF;
-}
-
-.dark .btn-ghost:hover {
-  color: #F9FAFB;
-}
-
 /* Card */
 .card {
   background: white;
@@ -206,11 +162,6 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 1rem;
   padding: 1.5rem;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .card {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Card Hover */
@@ -228,15 +179,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.1), 0 8px 10px -6px rgba(37, 99, 235, 0.1);
 }
 
-.dark .card-hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark .card-hover:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
 /* Glass Card */
 .glass-card {
   background: rgba(255, 255, 255, 0.8);
@@ -251,16 +193,6 @@ h1, h2, h3, h4, h5, h6 {
   background: white;
   border-color: #D1D5DB;
   box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.1), 0 8px 10px -6px rgba(37, 99, 235, 0.1);
-}
-
-.dark .glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark .glass-card:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Input */
@@ -284,20 +216,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .input:focus {
   outline: none;
-  border-color: #6366F1;
-}
-
-.dark .input {
-  background: #1E293B;
-  border-color: #374151;
-  color: #F9FAFB;
-}
-
-.dark .input::placeholder {
-  color: #9CA3AF;
-}
-
-.dark .input:focus {
   border-color: #6366F1;
 }
 
@@ -363,24 +281,12 @@ h1, h2, h3, h4, h5, h6 {
   background: #F3F4F6;
 }
 
-.dark ::-webkit-scrollbar-track {
-  background: #111827;
-}
-
 ::-webkit-scrollbar-thumb {
   background: #9CA3AF;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6B7280;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #4B5563;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
   background: #6B7280;
 }
 
