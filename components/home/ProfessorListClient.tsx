@@ -36,6 +36,13 @@ export function ProfessorListClient() {
     []
   )
 
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel()
+    }
+  }, [debouncedSearch])
+
   // Load data on mount
   useEffect(() => {
     // Simulate loading delay for smooth transition
@@ -362,7 +369,7 @@ export function ProfessorListClient() {
                     <button
                       key={tag}
                       onClick={() => handleTagToggle(tag)}
-                      className={`px-4 py-2.5 rounded-full text-[15px] font-medium transition-colors min-h-[44px] ${
+                      className={`px-4 py-3 rounded-full text-[15px] font-medium transition-colors min-h-[48px] ${
                         selectedTags.includes(tag)
                           ? 'bg-purple-600 text-white'
                           : 'bg-gray-100 text-gray-700 active:bg-gray-200'

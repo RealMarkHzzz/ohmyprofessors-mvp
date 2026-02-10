@@ -74,16 +74,6 @@ export const Navbar = () => {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 space-y-4 border-t border-gray-200">
-            {/* Close button at top right */}
-            <div className="flex justify-end pb-2">
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                aria-label="Close menu"
-              >
-                <X className="w-6 h-6 text-gray-600" />
-              </button>
-            </div>
             <a href="#features" className="block text-sm text-gray-500 hover:text-gray-900">
               Features
             </a>

@@ -64,7 +64,7 @@ export function StarRating({
         </label>
       )}
       
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         {Array.from({ length: max }, (_, i) => i + 1).map((rating) => {
           const isFilled = rating <= displayValue
           const isHovered = hoverValue !== null && rating <= hoverValue
@@ -78,7 +78,7 @@ export function StarRating({
               onMouseLeave={handleMouseLeave}
               disabled={disabled}
               className={cn(
-                'p-2 -m-2 transition-all duration-150 ease-out min-w-[44px] min-h-[44px] flex items-center justify-center',
+                'p-2 transition-all duration-150 ease-out min-w-[44px] min-h-[44px] flex items-center justify-center',
                 disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-110',
                 'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-sm'
               )}

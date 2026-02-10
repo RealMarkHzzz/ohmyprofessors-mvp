@@ -66,18 +66,27 @@ export function percentage(value: number, total: number): number {
 }
 
 /**
- * Debounce function
+ * Debounce function with cancel method
  */
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
-): (...args: Parameters<T>) => void {
+): ((...args: Parameters<T>) => void) & { cancel: () => void } {
   let timeout: NodeJS.Timeout | null = null
   
-  return (...args: Parameters<T>) => {
+  const debounced = (...args: Parameters<T>) => {
     if (timeout) clearTimeout(timeout)
     timeout = setTimeout(() => func(...args), wait)
   }
+  
+  debounced.cancel = () => {
+    if (timeout) {
+      clearTimeout(timeout)
+      timeout = null
+    }
+  }
+  
+  return debounced
 }
 
 /**
