@@ -4,6 +4,65 @@ import { z } from 'zod';
  * Validation schemas for OhMyProfessors
  */
 
+// 标签定义（唯一来源）
+export const REVIEW_TAGS = [
+  'Helpful',
+  'Clear Explanations',
+  'Tough Grader',
+  'Easy Grader',
+  'Lots of Homework',
+  'Gives Good Feedback',
+  'Inspirational',
+  'Accessible Outside Class',
+  'Participation Matters',
+  'Heavy Workload',
+  'Lecture Heavy',
+  'Group Projects',
+  'Test Heavy',
+  'Amazing Lectures',
+  'Caring',
+  'Respected',
+  'Engaging',
+  'Available',
+  'Disorganized',
+  'Unapproachable',
+  'Skip Class? You Won\'t Pass',
+] as const
+
+export type ReviewTag = typeof REVIEW_TAGS[number]
+
+// 语义化标签分类
+export const POSITIVE_TAGS: readonly ReviewTag[] = [
+  'Helpful',
+  'Clear Explanations',
+  'Easy Grader',
+  'Gives Good Feedback',
+  'Inspirational',
+  'Accessible Outside Class',
+  'Amazing Lectures',
+  'Caring',
+  'Respected',
+  'Engaging',
+  'Available',
+]
+
+export const NEGATIVE_TAGS: readonly ReviewTag[] = [
+  'Tough Grader',
+  'Heavy Workload',
+  'Test Heavy',
+  'Disorganized',
+  'Unapproachable',
+]
+
+export const NEUTRAL_TAGS: readonly ReviewTag[] = [
+  'Lots of Homework',
+  'Participation Matters',
+  'Lecture Heavy',
+  'Group Projects',
+  'Respected',
+  'Skip Class? You Won\'t Pass',
+]
+
 // Review submission schema
 export const reviewSchema = z.object({
   professor_id: z.string().min(1, 'Professor ID is required'),
@@ -24,7 +83,7 @@ export const reviewSchema = z.object({
     .max(2000, 'Review must be 2000 characters or less')
     .optional()
     .nullable(),
-  tags: z.array(z.string())
+  tags: z.array(z.enum(REVIEW_TAGS))
     .min(1, 'Select at least one tag')
     .max(10, 'Select at most 10 tags'),
   semester: z.string()

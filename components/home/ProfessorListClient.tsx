@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { ProfessorCard } from '@/components/shared/ProfessorCard'
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
@@ -10,6 +10,7 @@ import { searchAndFilterProfessors, type SortOption } from '@/lib/search-utils'
 import { Professor } from '@/lib/types'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { debounce } from '@/lib/utils'
 import gsap from 'gsap'
 
 export function ProfessorListClient() {
@@ -19,12 +20,21 @@ export function ProfessorListClient() {
   const professorListRef = useRef<HTMLDivElement>(null)
   
   // Search and filter state
-  const [searchQuery, setSearchQuery] = useState('')
+  const [inputValue, setInputValue] = useState('') // For immediate input feedback
+  const [searchQuery, setSearchQuery] = useState('') // For debounced search
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [minRating, setMinRating] = useState<number | null>(null)
   const [sortBy, setSortBy] = useState<SortOption>('rating-desc')
   const [showFilters, setShowFilters] = useState(false)
+
+  // Debounced search handler
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchQuery(value)
+    }, 300),
+    []
+  )
 
   // Load data on mount
   useEffect(() => {
@@ -97,10 +107,17 @@ export function ProfessorListClient() {
   }
 
   const clearFilters = () => {
+    setInputValue('')
     setSearchQuery('')
     setSelectedDepartment(null)
     setSelectedTags([])
     setMinRating(null)
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInputValue(value)
+    debouncedSearch(value)
   }
 
   const hasActiveFilters = searchQuery || selectedDepartment || selectedTags.length > 0 || minRating !== null
@@ -140,8 +157,8 @@ export function ProfessorListClient() {
             <input
               type="text"
               placeholder="Search professors by name, department..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={inputValue}
+              onChange={handleSearchChange}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>

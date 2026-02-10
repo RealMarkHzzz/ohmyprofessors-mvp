@@ -1,6 +1,7 @@
 'use client'
 
 import { Review } from '@/lib/types'
+import { POSITIVE_TAGS, NEGATIVE_TAGS, NEUTRAL_TAGS, type ReviewTag } from '@/lib/validations'
 import { Star, ThumbsUp, Calendar, BookOpen, TrendingUp } from 'lucide-react'
 import { formatDistanceToNow } from '@/lib/utils'
 
@@ -8,32 +9,21 @@ interface ReviewCardProps {
   review: Review
 }
 
-// Tag type detection
-const TAG_TYPES = {
-  positive: ['Easy Grader', 'Helpful', 'Clear Explanations', 'Amazing Lectures', 'Gives Good Feedback', 'Engaging', 'Available'],
-  negative: ['Tough Grader', 'Heavy Workload', 'Disorganized', 'Unapproachable'],
-  neutral: ['Lots of Homework', 'Skip Class? You Won\'t Pass', 'Respected'],
-}
-
-function getTagType(tag: string): 'positive' | 'negative' | 'neutral' {
-  if (TAG_TYPES.positive.some(t => tag.toLowerCase().includes(t.toLowerCase()))) return 'positive'
-  if (TAG_TYPES.negative.some(t => tag.toLowerCase().includes(t.toLowerCase()))) return 'negative'
-  return 'neutral'
+// 替换硬编码的标签判断
+function getTagColor(tag: string): string {
+  if (POSITIVE_TAGS.includes(tag as ReviewTag)) return 'bg-green-100 text-green-800'
+  if (NEGATIVE_TAGS.includes(tag as ReviewTag)) return 'bg-red-100 text-red-800'
+  if (NEUTRAL_TAGS.includes(tag as ReviewTag)) return 'bg-gray-100 text-gray-800'
+  return 'bg-gray-100 text-gray-800'
 }
 
 function TagBadge({ tag }: { tag: string }) {
-  const type = getTagType(tag)
-  
-  const colorClasses = {
-    positive: 'bg-green-100 text-green-800',
-    negative: 'bg-red-100 text-red-800',
-    neutral: 'bg-gray-100 text-gray-800',
-  }
+  const colorClass = getTagColor(tag)
 
   return (
     <span className={`
       inline-block px-3 py-1 rounded-full text-xs font-medium
-      ${colorClasses[type]}
+      ${colorClass}
     `}>
       {tag}
     </span>

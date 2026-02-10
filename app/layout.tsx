@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Space_Grotesk } from "next/font/google";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -38,7 +39,9 @@ export default function RootLayout({
       <body
         className={`${dmSans.variable} ${spaceGrotesk.variable} font-sans antialiased`}
       >
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
       </body>
     </html>
   );
