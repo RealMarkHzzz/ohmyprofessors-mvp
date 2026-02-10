@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { User } from "@/types";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 /**
  * Hook to manage user authentication state
@@ -14,7 +14,7 @@ import type { User } from "@/types";
  * if (!user) return <LoginPrompt />;
  */
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
 
