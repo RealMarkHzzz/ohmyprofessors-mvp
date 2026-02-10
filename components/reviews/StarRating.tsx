@@ -16,9 +16,9 @@ interface StarRatingProps {
 }
 
 const sizeConfig = {
-  sm: 'w-4 h-4',
-  md: 'w-6 h-6',
-  lg: 'w-8 h-8'
+  sm: 'w-5 h-5',
+  md: 'w-8 h-8',
+  lg: 'w-10 h-10'
 }
 
 export function StarRating({
@@ -64,7 +64,7 @@ export function StarRating({
         </label>
       )}
       
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         {Array.from({ length: max }, (_, i) => i + 1).map((rating) => {
           const isFilled = rating <= displayValue
           const isHovered = hoverValue !== null && rating <= hoverValue
@@ -78,7 +78,7 @@ export function StarRating({
               onMouseLeave={handleMouseLeave}
               disabled={disabled}
               className={cn(
-                'transition-all duration-150 ease-out',
+                'p-2 -m-2 transition-all duration-150 ease-out min-w-[44px] min-h-[44px] flex items-center justify-center',
                 disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-110',
                 'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-sm'
               )}

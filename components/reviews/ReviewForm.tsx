@@ -269,7 +269,7 @@ export function ReviewForm({ professorId, professorName, onSuccess, onCancel }: 
             </span>
           </div>
           
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {REVIEW_TAGS.map((tag) => {
               const isSelected = selectedTags.includes(tag)
               return (
@@ -279,8 +279,8 @@ export function ReviewForm({ professorId, professorName, onSuccess, onCancel }: 
                   onClick={() => toggleTag(tag)}
                   disabled={submitState === 'submitting' || (!isSelected && selectedTags.length >= 10)}
                   className={cn(
-                    'px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150',
-                    'border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                    'px-4 py-2.5 rounded-full text-[15px] font-medium transition-all duration-150 min-h-[40px]',
+                    'border-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                     isSelected
                       ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-700'
                       : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-300 dark:border-zinc-700 hover:border-blue-400 dark:hover:border-blue-600',

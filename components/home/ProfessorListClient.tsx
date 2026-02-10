@@ -172,9 +172,9 @@ export function ProfessorListClient() {
           </Button>
         </div>
 
-        {/* Filter Panel */}
+        {/* Desktop Filter Panel */}
         {showFilters && (
-          <div className="border-t pt-4 space-y-4">
+          <div className="hidden md:block border-t pt-4 space-y-4">
             {/* Department Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -280,6 +280,119 @@ export function ProfessorListClient() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter Drawer */}
+      {showFilters && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowFilters(false)}
+          />
+          
+          {/* Drawer Panel */}
+          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl max-h-[85vh] overflow-y-auto">
+            {/* Header */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+              <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+              <button
+                onClick={() => setShowFilters(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label="Close filters"
+              >
+                <X className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            {/* Filter Content */}
+            <div className="p-6 space-y-6">
+              {/* Department Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Department
+                </label>
+                <div className="flex flex-wrap gap-3">
+                  {departments.map((dept) => (
+                    <button
+                      key={dept}
+                      onClick={() => setSelectedDepartment(
+                        selectedDepartment === dept ? null : dept
+                      )}
+                      className={`px-4 py-2.5 rounded-full text-[15px] font-medium transition-colors min-h-[44px] ${
+                        selectedDepartment === dept
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-100 text-gray-700 active:bg-gray-200'
+                      }`}
+                    >
+                      {dept}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rating Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Minimum Rating
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  {[4.5, 4.0, 3.5, 3.0].map((rating) => (
+                    <button
+                      key={rating}
+                      onClick={() => setMinRating(minRating === rating ? null : rating)}
+                      className={`px-4 py-3 rounded-lg text-[15px] font-medium transition-colors min-h-[48px] ${
+                        minRating === rating
+                          ? 'bg-yellow-500 text-white'
+                          : 'bg-gray-100 text-gray-700 active:bg-gray-200'
+                      }`}
+                    >
+                      {rating}+ ⭐
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tags Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Tags
+                </label>
+                <div className="flex flex-wrap gap-3">
+                  {availableTags.slice(0, 12).map((tag) => (
+                    <button
+                      key={tag}
+                      onClick={() => handleTagToggle(tag)}
+                      className={`px-4 py-2.5 rounded-full text-[15px] font-medium transition-colors min-h-[44px] ${
+                        selectedTags.includes(tag)
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-gray-100 text-gray-700 active:bg-gray-200'
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 flex gap-3">
+              <button
+                onClick={clearFilters}
+                className="flex-1 px-6 py-3 rounded-lg font-medium border-2 border-gray-300 text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors min-h-[48px]"
+              >
+                Clear
+              </button>
+              <button
+                onClick={() => setShowFilters(false)}
+                className="flex-1 px-6 py-3 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 transition-colors min-h-[48px]"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Professor List */}
       <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
