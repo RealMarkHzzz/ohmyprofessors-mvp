@@ -9,9 +9,11 @@ interface ProfessorCardProps {
   name: string
   department: string
   email: string
-  reviewCount?: number
-  averageRating?: number
+  overall_rating?: number
+  total_reviews?: number
   tags?: string[]
+  avatar_url?: string | null
+  title?: string
   onClick?: () => void
 }
 
@@ -76,9 +78,11 @@ export function ProfessorCard({
   name,
   department,
   email,
-  reviewCount = 0,
-  averageRating,
+  overall_rating,
+  total_reviews = 0,
   tags = [],
+  avatar_url,
+  title,
   onClick,
 }: ProfessorCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -89,9 +93,7 @@ export function ProfessorCard({
     }
   }, [])
 
-  // Mock tags for demonstration (P0 requirement)
-  const displayTags = tags.length > 0 ? tags : ['Clear Explanations', 'Heavy Workload', 'Helpful']
-  const limitedTags = displayTags.slice(0, 3)
+  const limitedTags = tags.slice(0, 3)
 
   return (
     <div
@@ -103,23 +105,42 @@ export function ProfessorCard({
         bg-white/80
         backdrop-blur-sm
         transition-shadow
+        hover:shadow-lg
       "
       style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}
     >
-      {/* Primary Information: Professor Name - P0 Requirement (24px Bold) */}
-      <h4 className="text-2xl font-bold text-gray-900 mb-3">
-        {name}
-      </h4>
+      <div className="flex items-start gap-4 mb-4">
+        {/* Avatar */}
+        {avatar_url && (
+          <img 
+            src={avatar_url} 
+            alt={name}
+            className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+          />
+        )}
+        
+        <div className="flex-1 min-w-0">
+          {/* Professor Name - P0 Requirement (24px Bold) */}
+          <h4 className="text-2xl font-bold text-gray-900 mb-1 truncate">
+            {name}
+          </h4>
+          
+          {/* Title */}
+          {title && (
+            <p className="text-sm text-gray-600 mb-2">{title}</p>
+          )}
+        </div>
+      </div>
       
-      {/* Secondary Information: Rating + Stars - P0 Requirement (18px) */}
-      {reviewCount > 0 && averageRating ? (
+      {/* Rating + Stars - P0 Requirement (18px) */}
+      {total_reviews > 0 && overall_rating ? (
         <div className="flex items-center gap-3 mb-4">
           <span className="text-lg font-medium text-gray-900">
-            {averageRating.toFixed(1)}
+            {overall_rating.toFixed(1)}
           </span>
-          <StarRating rating={averageRating} />
+          <StarRating rating={overall_rating} />
           <span className="text-sm text-gray-600">
-            ({reviewCount} {reviewCount === 1 ? 'review' : 'reviews'})
+            ({total_reviews} {total_reviews === 1 ? 'review' : 'reviews'})
           </span>
         </div>
       ) : (
@@ -131,11 +152,13 @@ export function ProfessorCard({
       )}
 
       {/* Semantic Tags - P0 Requirement */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {limitedTags.map((tag, index) => (
-          <TagBadge key={index} tag={tag} />
-        ))}
-      </div>
+      {limitedTags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {limitedTags.map((tag, index) => (
+            <TagBadge key={index} tag={tag} />
+          ))}
+        </div>
+      )}
       
       {/* Tertiary Information: Department & Email */}
       <div className="space-y-1">
@@ -143,7 +166,7 @@ export function ProfessorCard({
           <BookOpen className="w-4 h-4 text-blue-600" />
           {department}
         </p>
-        <p className="text-xs text-gray-500 flex items-center gap-2">
+        <p className="text-xs text-gray-500 flex items-center gap-2 truncate">
           <Mail className="w-3 h-3 text-gray-400" />
           {email}
         </p>
