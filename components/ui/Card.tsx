@@ -26,6 +26,7 @@ export interface FeatureCardProps {
   icon: React.ReactNode
   title: string
   description: string
+  metric?: string
   className?: string
 }
 
@@ -33,19 +34,27 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
   icon, 
   title, 
   description,
+  metric,
   className = '' 
 }) => {
   return (
     <Card hover className={className}>
-      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+      <div className="flex items-center justify-center mb-6">
         {icon}
       </div>
-      <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">
+      <h3 className="font-heading text-xl font-semibold text-gray-900 mb-3 text-center">
         {title}
       </h3>
-      <p className="text-sm text-gray-600 leading-relaxed">
+      <p className="text-base text-gray-600 leading-relaxed mb-4 text-center">
         {description}
       </p>
+      {metric && (
+        <div className="text-center mt-4 pt-4 border-t border-gray-200">
+          <p className="text-sm font-semibold" style={{ color: '#D4AF37' }}>
+            {metric}
+          </p>
+        </div>
+      )}
     </Card>
   )
 }

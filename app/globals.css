@@ -105,19 +105,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1rem;
   font-weight: 600;
   color: white;
-  background: linear-gradient(to right, #2563EB, #3B82F6);
+  background: #111827;
   border-radius: 0.75rem;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 0 0 0 transparent;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -4px rgba(37, 99, 235, 0.3);
+  background: #1F2937;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 /* Button Secondary */
@@ -262,12 +262,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Gradient Text */
+/* Gradient Text - Replaced with solid color for Flat Design */
 .gradient-text {
-  background: linear-gradient(to right, #2563EB, #3B82F6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #111827;
+  font-weight: 700;
 }
 
 /* ========================================

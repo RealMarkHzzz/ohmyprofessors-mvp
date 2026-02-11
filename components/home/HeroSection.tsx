@@ -1,39 +1,36 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { GraduationCap, Star } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
-import { Input } from '@/components/ui/Input'
-
-const TRENDING_TAGS = [
-  'Computer Science',
-  'Mathematics',
-  'Engineering',
-  'Physics',
-  'Biology',
-]
+import { Search } from 'lucide-react'
 
 export function HeroSection() {
-  const sloganRef = useRef<HTMLHeadingElement>(null)
-  const subtitleRef = useRef<HTMLParagraphElement>(null)
-  const searchBarRef = useRef<HTMLDivElement>(null)
-  const tagsRef = useRef<HTMLDivElement>(null)
-  const chatCardRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
+    if (!containerRef.current) return
+
     // Enhanced entry animation with GSAP
     const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    const container = containerRef.current
 
-    timeline
-      .from(sloganRef.current, {
+    const h1 = container.querySelector('h1')
+    const subtitle = container.querySelector('.subtitle')
+    const searchContainer = container.querySelector('.search-container')
+    const searchHint = container.querySelector('.search-hint')
+
+    if (h1) {
+      timeline.from(h1, {
         y: 30,
         opacity: 0,
         duration: 0.8,
       })
-      .from(
-        subtitleRef.current,
+    }
+
+    if (subtitle) {
+      timeline.from(
+        subtitle,
         {
           y: 20,
           opacity: 0,
@@ -41,8 +38,11 @@ export function HeroSection() {
         },
         '-=0.4'
       )
-      .from(
-        searchBarRef.current,
+    }
+
+    if (searchContainer) {
+      timeline.from(
+        searchContainer,
         {
           scale: 0.95,
           opacity: 0,
@@ -50,145 +50,89 @@ export function HeroSection() {
         },
         '-=0.3'
       )
-      .from(
-        tagsRef.current?.children ?? [],
+    }
+
+    if (searchHint) {
+      timeline.from(
+        searchHint,
         {
           y: 10,
           opacity: 0,
           duration: 0.4,
-          stagger: 0.08,
         },
         '-=0.2'
       )
-      .from(
-        chatCardRef.current,
-        {
-          x: 20,
-          opacity: 0,
-          duration: 0.7,
-        },
-        '-=0.5'
-      )
+    }
 
     return () => {
       timeline.kill()
     }
   }, [])
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    // TODO: 实现搜索逻辑
+    console.log('Searching for:', searchQuery)
+  }
+
   return (
-    <section className="section bg-white pt-24">
+    <section className="bg-white pt-32 pb-24">
       <div className="container-custom">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div ref={containerRef} className="max-w-4xl mx-auto text-center">
           
-          {/* Left Content */}
-          <div className="space-y-8">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full">
-              <GraduationCap className="w-5 h-5 text-blue-600" />
-              <span className="text-xs text-gray-600 font-medium">
-                Trusted by 10,000+ Students
-              </span>
-            </div>
-            
-            {/* Heading */}
-            <h1 
-              ref={sloganRef}
-              className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900"
-            >
-              Find Your Perfect{' '}
-              <span className="gradient-text">Professor</span>
-            </h1>
-            
-            {/* Description */}
-            <p 
-              ref={subtitleRef}
-              className="text-lg text-gray-600 leading-relaxed"
-            >
-              Real student reviews and ratings to help you make informed decisions about your courses and professors.
-            </p>
-            
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4">
-              <Button>
-                Browse Professors
-              </Button>
-              <Button variant="secondary">
-                Write a Review
-              </Button>
-            </div>
-          </div>
+          {/* 新 Slogan */}
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-950 mb-6 leading-tight">
+            为每门课程找到最好的教授
+          </h1>
           
-          {/* Right - Search Demo Card */}
-          <div ref={chatCardRef}>
-            <Card className="shadow-xl">
-              {/* Search Header */}
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                  OP
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">
-                    OhMyProfessors Search
-                  </div>
-                  <div className="text-sm text-green-500">
-                    Ready to help
-                  </div>
-                </div>
-              </div>
-              
-              {/* Search Bar */}
-              <div ref={searchBarRef} className="mb-4">
-                <Input
+          {/* 副标题 */}
+          <p className="subtitle text-xl text-gray-600 mb-8 leading-relaxed">
+            基于真实学生评价，帮你避开烂课，选对教授
+          </p>
+          
+          {/* 万能搜索框 */}
+          <div className="search-container w-full max-w-2xl mx-auto mb-3">
+            <form onSubmit={handleSearch}>
+              <div className="relative">
+                <input
                   type="text"
-                  placeholder="Search by professor name or course code..."
-                  className="w-full"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="搜索课程代码（如 COMP 1012）或教授名..."
+                  className="
+                    w-full h-14 px-6 pr-32
+                    text-base
+                    border-2 border-gray-300
+                    rounded-xl
+                    focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/20
+                    focus:outline-none
+                    transition-all
+                  "
                 />
+                <button 
+                  type="submit"
+                  className="
+                    absolute right-2 top-2 bottom-2
+                    px-6
+                    bg-[#D4AF37] text-white
+                    font-semibold
+                    rounded-lg
+                    hover:bg-[#C19B2F]
+                    transition-colors
+                    flex items-center gap-2
+                  "
+                >
+                  <Search className="w-4 h-4" />
+                  立即搜索
+                </button>
               </div>
-              
-              {/* Trending Tags */}
-              <div ref={tagsRef} className="space-y-3">
-                <span className="text-xs text-gray-500 font-medium">
-                  Popular searches:
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  {TRENDING_TAGS.map((tag) => (
-                    <button
-                      key={tag}
-                      className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-full transition-colors duration-200 border border-gray-200"
-                    >
-                      {tag}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Sample Results */}
-              <div className="mt-6 space-y-3">
-                <div className="text-xs text-gray-500 font-medium">
-                  Recent reviews:
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className="flex text-yellow-400">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-400" />
-                      ))}
-                    </div>
-                    <span className="text-gray-700">Prof. Smith - CS101</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className="flex text-yellow-400">
-                      {[1, 2, 3, 4].map((i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-400" />
-                      ))}
-                      <Star className="w-4 h-4" />
-                    </div>
-                    <span className="text-gray-700">Dr. Johnson - MATH201</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            </form>
           </div>
+          
+          {/* 示例提示 */}
+          <p className="search-hint text-sm text-gray-500 text-center">
+            试试搜索 "COMP 1012" 或 "Sarah Johnson"
+          </p>
           
         </div>
       </div>

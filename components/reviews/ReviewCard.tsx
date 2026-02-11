@@ -83,7 +83,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
         </div>
 
         {/* Rating Badge */}
-        <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg px-4 py-2 text-center">
+        <div className="bg-gray-50 rounded-xl px-4 py-2 text-center border border-gray-200">
           <div className="text-2xl font-bold text-gray-900">
             {review.rating.toFixed(1)}
           </div>

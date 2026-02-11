@@ -1,38 +1,26 @@
 'use client'
 
-import { Check, Zap, BarChart3, Search, Users, Lock } from 'lucide-react'
+import { Target, AlertTriangle, TrendingUp } from 'lucide-react'
 import { FeatureCard } from '@/components/ui/Card'
 
 const features = [
   {
-    icon: <Check className="w-12 h-12 text-blue-600" />,
-    title: 'Verified Reviews',
-    description: 'All reviews are from verified students who have taken courses with the professors.',
+    icon: <Target className="w-16 h-16 text-gray-950" />,
+    title: '找到最好的教授',
+    description: '基于真实学生评价，帮你选择最适合的授课教授',
+    metric: '平均 GPA 提升 0.5 分',
   },
   {
-    icon: <Zap className="w-12 h-12 text-blue-600" />,
-    title: 'Real-Time Updates',
-    description: 'Get instant notifications when new reviews are posted for your courses.',
+    icon: <AlertTriangle className="w-16 h-16 text-gray-950" />,
+    title: '避开烂课',
+    description: '提前了解课程难度和教授风格，避免踩雷',
+    metric: '92% 学生避免选错课',
   },
   {
-    icon: <BarChart3 className="w-12 h-12 text-blue-600" />,
-    title: 'Detailed Ratings',
-    description: 'See ratings for teaching quality, difficulty, grading fairness, and more.',
-  },
-  {
-    icon: <Search className="w-12 h-12 text-blue-600" />,
-    title: 'Advanced Search',
-    description: 'Filter by department, course level, rating, and more to find the perfect professor.',
-  },
-  {
-    icon: <Users className="w-12 h-12 text-blue-600" />,
-    title: 'Community Driven',
-    description: 'Join thousands of students sharing their experiences to help others succeed.',
-  },
-  {
-    icon: <Lock className="w-12 h-12 text-blue-600" />,
-    title: 'Privacy Protected',
-    description: 'Your personal information is encrypted and never shared with professors or universities.',
+    icon: <TrendingUp className="w-16 h-16 text-gray-950" />,
+    title: '提升 GPA',
+    description: '选对教授，事半功倍，轻松拿高分',
+    metric: '真实案例：3.2 → 3.7',
   },
 ]
 
@@ -43,11 +31,11 @@ export const FeaturesSection = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Why Choose{' '}
-            <span className="gradient-text">OhMyProfessors</span>
+            为什么选择{' '}
+            <span className="text-gray-950">OhMyProfessors</span>
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Make informed decisions about your education with comprehensive professor reviews and ratings.
+            选对教授，少走弯路，轻松提升 GPA
           </p>
         </div>
         

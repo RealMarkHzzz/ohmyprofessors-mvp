@@ -86,7 +86,7 @@ export default function ProfessorPage({ params, searchParams }: ProfessorPagePro
 
   if (!professor) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Professor Not Found</h1>
           <Button onClick={() => router.push('/')} variant="secondary">
@@ -127,7 +127,7 @@ export default function ProfessorPage({ params, searchParams }: ProfessorPagePro
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-white">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Back Button */}
         <button
@@ -195,7 +195,7 @@ export default function ProfessorPage({ params, searchParams }: ProfessorPagePro
             </div>
 
             {/* Overall Rating Card */}
-            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg p-6 text-center min-w-[180px]">
+            <div className="bg-gray-50 rounded-xl p-6 text-center min-w-[180px] border border-gray-200">
               <div className="text-5xl font-bold text-gray-900 mb-2">
                 {professor.overall_rating.toFixed(1)}
               </div>

@@ -298,7 +298,7 @@ export function ProfessorListClient({
           />
           
           {/* Drawer Panel */}
-          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl max-h-[85vh] overflow-y-auto">
+          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-sm border border-gray-200 max-h-[85vh] overflow-y-auto">
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
               <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
