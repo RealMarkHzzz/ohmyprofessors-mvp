@@ -9,36 +9,36 @@ export async function SocialProofBar() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           
-          {/* 指标 1: 评价数量 */}
+          {/* Metric 1: Total Reviews */}
           <div className="flex flex-col items-center">
             <Star className="w-12 h-12 text-gray-900 mb-2" />
             <div className="text-3xl font-bold text-gray-950">
               {totalReviews.toLocaleString()}
             </div>
             <div className="text-sm text-gray-600 mt-1">
-              条真实评价
+              verified reviews
             </div>
           </div>
 
-          {/* 指标 2: 学生数量 */}
+          {/* Metric 2: Student Count */}
           <div className="flex flex-col items-center">
             <Users className="w-12 h-12 text-gray-900 mb-2" />
             <div className="text-3xl font-bold text-gray-950">
               {totalStudents.toLocaleString()}+
             </div>
             <div className="text-sm text-gray-600 mt-1">
-              阿德莱德学生使用
+              students across Australia's G8 universities
             </div>
           </div>
 
-          {/* 指标 3: University Logo */}
+          {/* Metric 3: G8 Universities */}
           <div className="flex flex-col items-center">
             <BookOpen className="w-12 h-12 text-gray-900 mb-2" />
             <div className="text-lg font-semibold text-gray-950 mt-2">
-              University of Adelaide
+              Australia's Group of Eight
             </div>
             <div className="text-sm text-gray-600 mt-1">
-              官方认证数据源
+              Covering all G8 universities
             </div>
           </div>
           

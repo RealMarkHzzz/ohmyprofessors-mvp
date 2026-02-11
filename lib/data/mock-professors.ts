@@ -1,8 +1,8 @@
 import { Professor } from '../types';
 
 /**
- * Mock Professor Data for University of Adelaide
- * 30 professors across Computer Science, Mathematics, and Engineering
+ * Mock Professor Data for Australia's G8 Universities
+ * Sample data representing professors from various G8 institutions
  */
 export const mockProfessors: Professor[] = [
   // Computer Science Department

@@ -47,7 +47,7 @@ export default async function Home() {
                 <span className="text-gray-950">Professors</span>
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                Explore reviews and ratings from students at University of Adelaide
+                Explore reviews and ratings from students across Australia's G8 universities
               </p>
             </div>
             
@@ -64,10 +64,10 @@ export default async function Home() {
         {/* CTA Section - Flat Design */}
         <div className="text-center py-12 bg-gray-50">
           <p className="text-gray-700 mb-4">
-            想分享你的课程体验？
+            Want to share your course experience?
           </p>
           <a href="/submit-review" className="text-[#D4AF37] hover:underline font-medium">
-            提交评价 →
+            Submit a Review →
           </a>
         </div>
       </main>

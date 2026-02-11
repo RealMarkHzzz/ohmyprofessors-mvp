@@ -31,7 +31,7 @@ export const mockReviews: Review[] = [
     difficulty: 4,
     course_code: 'CS4420',
     course_name: 'Deep Learning',
-    content: 'Best professor I\'ve had at Adelaide. She genuinely cares about student success and is always available for help. Her research background makes the course content cutting-edge.',
+    content: 'Best professor I\'ve had in my university experience. She genuinely cares about student success and is always available for help. Her research background makes the course content cutting-edge.',
     tags: ['Engaging', 'Helpful', 'Available'],
     helpful_count: 38,
     semester: '2025 Semester 1',

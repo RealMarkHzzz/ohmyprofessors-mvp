@@ -71,7 +71,7 @@ export function HeroSection() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: 实现搜索逻辑
+    // TODO: Implement search logic
     console.log('Searching for:', searchQuery)
   }
 
@@ -80,17 +80,17 @@ export function HeroSection() {
       <div className="container-custom">
         <div ref={containerRef} className="max-w-4xl mx-auto text-center">
           
-          {/* 新 Slogan */}
+          {/* Hero Heading */}
           <h1 className="text-5xl md:text-6xl font-bold text-gray-950 mb-6 leading-tight">
-            为每门课程找到最好的教授
+            Find Your Perfect Professor
           </h1>
           
-          {/* 副标题 */}
+          {/* Subtitle */}
           <p className="subtitle text-xl text-gray-600 mb-8 leading-relaxed">
-            基于真实学生评价，帮你避开烂课，选对教授
+            Real student reviews from Australia's top G8 universities
           </p>
           
-          {/* 万能搜索框 */}
+          {/* Universal Search Box */}
           <div className="search-container w-full max-w-2xl mx-auto mb-3">
             <form onSubmit={handleSearch}>
               <div className="relative">
@@ -98,7 +98,7 @@ export function HeroSection() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="搜索课程代码（如 COMP 1012）或教授名..."
+                  placeholder="Search by professor name, course code, or university..."
                   className="
                     w-full h-14 px-6 pr-32
                     text-base
@@ -123,15 +123,15 @@ export function HeroSection() {
                   "
                 >
                   <Search className="w-4 h-4" />
-                  立即搜索
+                  Search Now
                 </button>
               </div>
             </form>
           </div>
           
-          {/* 示例提示 */}
+          {/* Search Example Hint */}
           <p className="search-hint text-sm text-gray-500 text-center">
-            试试搜索 "COMP 1012" 或 "Sarah Johnson"
+            Try "COMP 1012", "Sarah Johnson", or "University of Melbourne"
           </p>
           
         </div>

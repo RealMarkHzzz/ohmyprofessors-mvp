@@ -82,7 +82,7 @@ export const Footer = () => {
               © 2027 OhMyProfessors. All rights reserved.
             </p>
             <p className="text-sm flex items-center gap-1">
-              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> for students at University of Adelaide
+              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> for students across Australia's G8 universities
             </p>
           </div>
         </div>

@@ -21,7 +21,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "OhMyProfessors - Find Your Perfect Professor",
   description: "Real Student Reviews, Real Decisions. Rate and discover professors at Australian universities.",
-  keywords: ["professor reviews", "university", "Adelaide", "rate my professor", "student reviews"],
+  keywords: ["professor reviews", "university", "Australia", "G8 universities", "rate my professor", "student reviews"],
   authors: [{ name: "OhMyProfessors Team" }],
   openGraph: {
     title: "OhMyProfessors - Find Your Perfect Professor",

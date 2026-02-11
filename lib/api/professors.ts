@@ -35,7 +35,7 @@ function mapProfessor(dbProf: DBProfessor & { universities?: University }): Prof
     name: dbProf.name,  // ✅ Fixed: Using correct field name
     email: dbProf.email || '',
     department: dbProf.department,
-    university: dbProf.universities?.name || 'University of Adelaide',
+    university: dbProf.universities?.name || 'Australia G8 University',
     avatar_url: dbProf.profile_image_url,
     bio: dbProf.bio,
     title: dbProf.title || 'Lecturer',
