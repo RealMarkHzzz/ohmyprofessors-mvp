@@ -52,15 +52,12 @@ export default async function HomePage() {
           ) : (
             <div className="p-8 text-center">
               <div className="max-w-md mx-auto">
-                <p className="text-gray-600 text-lg mb-4">
-                  🚀 Course data is being migrated
+                <p className="text-gray-600 text-lg mb-2">
+                  📚 No courses available yet
                 </p>
                 <p className="text-gray-500 text-sm">
-                  Run the migration script to populate course data:
+                  We're currently adding course data. Check back soon!
                 </p>
-                <pre className="mt-4 p-4 bg-gray-100 rounded text-left text-sm overflow-x-auto">
-                  npx tsx scripts/migrate-to-course-first.ts
-                </pre>
               </div>
             </div>
           )}

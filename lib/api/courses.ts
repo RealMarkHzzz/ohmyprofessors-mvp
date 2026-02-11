@@ -15,17 +15,51 @@ import type {
 import { mockCourses } from '@/lib/data/mock-courses'
 import { mockCourseProfessors } from '@/lib/data/mock-course-professors'
 
-// 开发模式：使用 mock 数据（待 Supabase 数据迁移完成后移除）
-const USE_MOCK_DATA = process.env.NODE_ENV === 'development' && process.env.USE_MOCK_COURSES === 'true'
-
 /**
  * 获取课程列表
  * @param university 可选的大学筛选
  * @returns Course[]
  */
 export async function getCourses(university?: string): Promise<Course[]> {
-  // 临时使用 mock 数据（待 Supabase 课程数据迁移完成后移除）
-  if (USE_MOCK_DATA) {
+  // 优先使用 Supabase 数据库
+  try {
+    const supabase = await createClient()
+    
+    let query = supabase
+      .from('courses')
+      .select('*')
+      .order('total_reviews', { ascending: false })
+    
+    if (university) {
+      query = query.eq('university', university)
+    }
+    
+    const { data, error } = await query
+    
+    if (error) {
+      console.error('Error fetching courses from database:', error)
+      throw error
+    }
+    
+    // 如果数据库有数据，返回数据库数据
+    if (data && data.length > 0) {
+      const { toCourse } = await import('@/lib/types/course')
+      return data.map(row => toCourse(row as CourseRow))
+    }
+    
+    // 如果数据库为空，fallback 到 mock 数据
+    console.log('Database is empty, using mock data as fallback')
+    let courses = mockCourses
+    if (university) {
+      courses = courses.filter(c => 
+        c.university.toLowerCase().includes(university.toLowerCase())
+      )
+    }
+    return courses.sort((a, b) => b.totalReviews - a.totalReviews)
+    
+  } catch (error) {
+    // 数据库查询失败，fallback 到 mock 数据
+    console.error('Database query failed, using mock data:', error)
     let courses = mockCourses
     if (university) {
       courses = courses.filter(c => 
@@ -34,28 +68,6 @@ export async function getCourses(university?: string): Promise<Course[]> {
     }
     return courses.sort((a, b) => b.totalReviews - a.totalReviews)
   }
-
-  const supabase = await createClient()
-  
-  let query = supabase
-    .from('courses')
-    .select('*')
-    .order('total_reviews', { ascending: false })
-  
-  if (university) {
-    query = query.eq('university', university)
-  }
-  
-  const { data, error } = await query
-  
-  if (error) {
-    console.error('Error fetching courses:', error)
-    throw new Error(`Failed to fetch courses: ${error.message}`)
-  }
-  
-  // Convert database rows to Course objects
-  const { toCourse } = await import('@/lib/types/course')
-  return (data || []).map(row => toCourse(row as CourseRow))
 }
 
 /**
@@ -68,35 +80,39 @@ export async function getCourseByCode(
   university: string,
   code: string
 ): Promise<Course | null> {
-  // 临时使用 mock 数据
-  if (USE_MOCK_DATA) {
+  try {
+    const supabase = await createClient()
+    
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('university', university)
+      .eq('code', code)
+      .single()
+    
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // Not found in database, try mock data
+        const course = mockCourses.find(
+          c => c.university.toLowerCase().includes(university.toLowerCase()) &&
+               c.code.toLowerCase() === code.toLowerCase()
+        )
+        return course || null
+      }
+      throw error
+    }
+    
+    const { toCourse } = await import('@/lib/types/course')
+    return toCourse(data as CourseRow)
+  } catch (error) {
+    // Fallback to mock data
+    console.error('Database query failed, using mock data:', error)
     const course = mockCourses.find(
       c => c.university.toLowerCase().includes(university.toLowerCase()) &&
            c.code.toLowerCase() === code.toLowerCase()
     )
     return course || null
   }
-
-  const supabase = await createClient()
-  
-  const { data, error } = await supabase
-    .from('courses')
-    .select('*')
-    .eq('university', university)
-    .eq('code', code)
-    .single()
-  
-  if (error) {
-    if (error.code === 'PGRST116') {
-      // Not found
-      return null
-    }
-    console.error('Error fetching course by code:', error)
-    throw new Error(`Failed to fetch course: ${error.message}`)
-  }
-  
-  const { toCourse } = await import('@/lib/types/course')
-  return toCourse(data as CourseRow)
 }
 
 /**
@@ -133,34 +149,42 @@ export async function getCourseById(courseId: string): Promise<Course | null> {
 export async function getCourseProfessors(
   courseId: string
 ): Promise<CourseProfessor[]> {
-  // 临时使用 mock 数据
-  if (USE_MOCK_DATA) {
+  try {
+    const supabase = await createClient()
+    
+    const { data, error } = await supabase
+      .from('course_professors')
+      .select(`
+        *,
+        professors (
+          id,
+          name,
+          slug,
+          avatar_url
+        )
+      `)
+      .eq('course_id', courseId)
+      .order('rating', { ascending: false })
+    
+    if (error) {
+      throw error
+    }
+    
+    // 如果数据库有数据，返回数据库数据
+    if (data && data.length > 0) {
+      const { toCourseProfessor } = await import('@/lib/types/course')
+      return data.map(row => toCourseProfessor(row as any))
+    }
+    
+    // 如果数据库为空，fallback 到 mock 数据
+    console.log('Course professors not found in database, using mock data')
+    return mockCourseProfessors[courseId] || []
+    
+  } catch (error) {
+    // 数据库查询失败，fallback 到 mock 数据
+    console.error('Database query failed, using mock data:', error)
     return mockCourseProfessors[courseId] || []
   }
-
-  const supabase = await createClient()
-  
-  const { data, error } = await supabase
-    .from('course_professors')
-    .select(`
-      *,
-      professors (
-        id,
-        name,
-        slug,
-        avatar_url
-      )
-    `)
-    .eq('course_id', courseId)
-    .order('rating', { ascending: false })
-  
-  if (error) {
-    console.error('Error fetching course professors:', error)
-    throw new Error(`Failed to fetch course professors: ${error.message}`)
-  }
-  
-  const { toCourseProfessor } = await import('@/lib/types/course')
-  return (data || []).map(row => toCourseProfessor(row as any))
 }
 
 /**
