@@ -1,10 +1,8 @@
-import { Navbar } from '@/components/shared/Navbar'
-import { HeroSection } from '@/components/home/HeroSection'
-import { SocialProofBar } from '@/components/home/SocialProofBar'
-import { FeaturesSection } from '@/components/home/FeaturesSection'
+import { ThreeColumnLayout } from '@/components/layout/ThreeColumnLayout'
+import { LeftSidebar } from '@/components/layout/LeftSidebar'
+import { RightSidebar } from '@/components/layout/RightSidebar'
+import { StickySearchBar } from '@/components/layout/StickySearchBar'
 import { ProfessorListClient } from '@/components/home/ProfessorListClient'
-import { Footer } from '@/components/shared/Footer'
-import { Button } from '@/components/ui/Button'
 import { getProfessors, getAllDepartments, getAllTags } from '@/lib/api/professors'
 import { getAllReviews } from '@/lib/api/reviews'
 
@@ -13,7 +11,7 @@ export const metadata = {
   description: 'Real Student Reviews, Real Decisions. Rate and discover professors at Australian universities.',
 }
 
-export default async function Home() {
+export default async function HomePage() {
   // Fetch data on the server (Server Component)
   const [professors, departments, tags, reviews] = await Promise.all([
     getProfessors(),
@@ -21,37 +19,26 @@ export default async function Home() {
     getAllTags(),
     getAllReviews(),
   ])
-
+  
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <Navbar />
-
-      {/* Main Content */}
-      <main>
-        {/* Hero Section */}
-        <HeroSection />
-
-        {/* Social Proof Bar */}
-        <SocialProofBar />
-
-        {/* Features Section */}
-        <FeaturesSection />
-
-        {/* Professor List Section */}
-        <section id="professors" className="section bg-white">
-          <div className="container-custom">
-            <div className="text-center mb-12">
-              <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Browse{' '}
-                <span className="text-gray-950">Professors</span>
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Explore reviews and ratings from students across Australia's G8 universities
-              </p>
-            </div>
-            
-            {/* Professor List - Client Component for interactivity */}
+    <ThreeColumnLayout
+      leftSidebar={<LeftSidebar />}
+      mainContent={
+        <>
+          {/* Simplified Hero + Sticky Search */}
+          <div className="py-8 px-6 text-center bg-white border-b border-gray-200">
+            <h1 className="text-4xl font-bold text-gray-900 mb-3">
+              Find Your Perfect Professor
+            </h1>
+            <p className="text-base text-gray-600 mb-6">
+              Real student reviews from Australia&apos;s G8 universities
+            </p>
+          </div>
+          
+          <StickySearchBar />
+          
+          {/* Professor List */}
+          <div className="p-6">
             <ProfessorListClient 
               initialProfessors={professors}
               initialDepartments={departments}
@@ -59,21 +46,9 @@ export default async function Home() {
               initialReviewCount={reviews.length}
             />
           </div>
-        </section>
-
-        {/* CTA Section - Flat Design */}
-        <div className="text-center py-12 bg-gray-50">
-          <p className="text-gray-700 mb-4">
-            Want to share your course experience?
-          </p>
-          <a href="/submit-review" className="text-[#D4AF37] hover:underline font-medium">
-            Submit a Review →
-          </a>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <Footer />
-    </div>
+        </>
+      }
+      rightSidebar={<RightSidebar />}
+    />
   )
 }
