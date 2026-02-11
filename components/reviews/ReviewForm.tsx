@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { reviewSchema, type ReviewFormData, REVIEW_TAGS } from '@/lib/validations'
+import { trackReviewSubmit } from '@/lib/analytics'
 import { StarRating } from './StarRating'
 import { X, Send, Loader2, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -75,6 +76,9 @@ export function ReviewForm({ professorId, professorName, onSuccess, onCancel }: 
       if (!response.ok || !result.success) {
         throw new Error(result.error || 'Failed to submit review')
       }
+
+      // Track review submission
+      trackReviewSubmit(result.data.id, professorId);
 
       setSubmitState('success')
       

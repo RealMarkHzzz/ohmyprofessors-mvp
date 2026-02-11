@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { BookOpen, Mail, Star } from 'lucide-react'
 import { setupProfessorCardHover } from '@/lib/animations/gsap-animations'
@@ -86,6 +86,7 @@ export function ProfessorCard({
   onClick,
 }: ProfessorCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (cardRef.current) {
@@ -93,22 +94,53 @@ export function ProfessorCard({
     }
   }, [])
 
+  const handleClick = () => {
+    if (onClick) {
+      setIsLoading(true)
+      onClick()
+    }
+  }
+
   const limitedTags = tags.slice(0, 3)
 
   return (
     <div
       ref={cardRef}
-      onClick={onClick}
+      onClick={handleClick}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          handleClick()
+        }
+      }}
       className="
-        border border-gray-200
+        group
+        relative
+        border-2 border-gray-200
         rounded-lg p-6 cursor-pointer 
-        bg-white/80
-        backdrop-blur-sm
-        transition-shadow
-        hover:shadow-lg
+        bg-white
+        transition-all duration-200
+        hover:border-blue-500
+        hover:shadow-[0_8px_30px_rgb(37,99,235,0.12)]
+        hover:bg-blue-50/30
+        hover:-translate-y-1
+        active:scale-[0.98]
+        active:shadow-[0_2px_8px_rgb(37,99,235,0.2)]
+        active:border-blue-600
+        focus:outline-none
+        focus:ring-4
+        focus:ring-blue-500/50
+        focus:border-blue-500
       "
       style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}
     >
+      {/* Loading overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-lg flex items-center justify-center z-10">
+          <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
       <div className="flex items-start gap-4 mb-4">
         {/* Avatar */}
         {avatar_url && (
@@ -123,8 +155,17 @@ export function ProfessorCard({
         )}
         
         <div className="flex-1 min-w-0">
-          {/* Professor Name - P0 Requirement (24px Bold) */}
-          <h4 className="text-2xl font-bold text-gray-900 mb-1 truncate">
+          {/* Professor Name - Enhanced UX with larger font, extrabold weight, and hover effect */}
+          <h4 className="
+            text-[28px] md:text-3xl 
+            font-extrabold 
+            text-gray-950 
+            mb-2
+            leading-tight
+            line-clamp-2
+            group-hover:text-blue-600
+            transition-colors
+          ">
             {name}
           </h4>
           

@@ -1,5 +1,21 @@
-import { Professor } from './types';
-import { getAllProfessors } from './data/mock-professors';
+// Professor interface compatible with both mock data and API
+export interface Professor {
+  id: string;
+  name: string;
+  email: string;
+  department: string;
+  university: string;
+  avatar_url: string | null;
+  bio: string | null;
+  title: string;
+  slug: string;
+  overall_rating: number;
+  total_reviews: number;
+  difficulty_rating: number;
+  would_take_again_percent: number;
+  tags: string[];
+  created_at: string;
+}
 
 export interface SearchFilters {
   query?: string;
@@ -91,13 +107,14 @@ export function sortProfessors(
 
 /**
  * Search and filter professors (combined)
+ * Now accepts professors array as first parameter for client-side filtering
  */
 export function searchAndFilterProfessors(
+  professors: Professor[],
   filters: SearchFilters,
   sortOption: SortOption = 'rating-desc'
 ): Professor[] {
-  const allProfessors = getAllProfessors();
-  const filtered = filterProfessors(allProfessors, filters);
+  const filtered = filterProfessors(professors, filters);
   const sorted = sortProfessors(filtered, sortOption);
   return sorted;
 }

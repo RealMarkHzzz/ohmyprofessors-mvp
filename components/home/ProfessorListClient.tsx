@@ -4,17 +4,29 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { ProfessorCard } from '@/components/shared/ProfessorCard'
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
-import { getAllProfessors, getAllDepartments, getAllTags } from '@/lib/data/mock-professors'
-import { getAllReviews } from '@/lib/data/mock-reviews'
+import type { Professor } from '@/lib/api/professors'
 import { searchAndFilterProfessors, type SortOption } from '@/lib/search-utils'
+import { trackSearch } from '@/lib/analytics'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { debounce } from '@/lib/utils'
 import gsap from 'gsap'
 
-export function ProfessorListClient() {
+interface ProfessorListClientProps {
+  initialProfessors: Professor[]
+  initialDepartments: string[]
+  initialTags: string[]
+  initialReviewCount: number
+}
+
+export function ProfessorListClient({
+  initialProfessors,
+  initialDepartments,
+  initialTags,
+  initialReviewCount,
+}: ProfessorListClientProps) {
   const router = useRouter()
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const statsRef = useRef<HTMLDivElement>(null)
   const professorListRef = useRef<HTMLDivElement>(null)
   
@@ -30,7 +42,11 @@ export function ProfessorListClient() {
   // Debounced search handler - using useMemo to avoid recreating on every render
   const debouncedSearch = useMemo(
     () => debounce((value: string) => {
-      setSearchQuery(value)
+      setSearchQuery(value);
+      // Track non-empty searches
+      if (value.trim()) {
+        trackSearch(value);
+      }
     }, 300),
     []
   )
@@ -42,19 +58,10 @@ export function ProfessorListClient() {
     }
   }, [debouncedSearch])
 
-  // Load data on mount
-  useEffect(() => {
-    // Simulate loading delay for smooth transition
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 300)
-    
-    return () => clearTimeout(timer)
-  }, [])
-
-  // Get filtered and sorted professors
+  // Get filtered and sorted professors using client-side filtering
   const professors = useMemo(() => {
     return searchAndFilterProfessors(
+      initialProfessors,
       {
         query: searchQuery,
         department: selectedDepartment,
@@ -63,13 +70,7 @@ export function ProfessorListClient() {
       },
       sortBy
     )
-  }, [searchQuery, selectedDepartment, minRating, selectedTags, sortBy])
-
-  // Get stats
-  const allProfessors = getAllProfessors()
-  const allReviews = getAllReviews()
-  const departments = getAllDepartments()
-  const availableTags = getAllTags()
+  }, [initialProfessors, searchQuery, selectedDepartment, minRating, selectedTags, sortBy])
 
   // Stats entry animation
   useEffect(() => {
@@ -141,15 +142,15 @@ export function ProfessorListClient() {
       {/* Stats */}
       <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-blue-600">{allProfessors.length}</div>
+          <div className="text-3xl font-bold text-blue-600">{initialProfessors.length}</div>
           <div className="text-gray-600 mt-2">Professors</div>
         </div>
         <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-green-600">{departments.length}</div>
+          <div className="text-3xl font-bold text-green-600">{initialDepartments.length}</div>
           <div className="text-gray-600 mt-2">Departments</div>
         </div>
         <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-purple-600">{allReviews.length}</div>
+          <div className="text-3xl font-bold text-purple-600">{initialReviewCount}</div>
           <div className="text-gray-600 mt-2">Reviews</div>
         </div>
       </div>
@@ -187,7 +188,7 @@ export function ProfessorListClient() {
                 Department
               </label>
               <div className="flex flex-wrap gap-2">
-                {departments.map((dept) => (
+                {initialDepartments.map((dept) => (
                   <button
                     key={dept}
                     onClick={() => setSelectedDepartment(
@@ -233,7 +234,7 @@ export function ProfessorListClient() {
                 Tags
               </label>
               <div className="flex flex-wrap gap-2">
-                {availableTags.slice(0, 12).map((tag) => (
+                {initialTags.slice(0, 12).map((tag) => (
                   <button
                     key={tag}
                     onClick={() => handleTagToggle(tag)}
@@ -318,7 +319,7 @@ export function ProfessorListClient() {
                   Department
                 </label>
                 <div className="flex flex-wrap gap-3">
-                  {departments.map((dept) => (
+                  {initialDepartments.map((dept) => (
                     <button
                       key={dept}
                       onClick={() => setSelectedDepartment(
@@ -364,7 +365,7 @@ export function ProfessorListClient() {
                   Tags
                 </label>
                 <div className="flex flex-wrap gap-3">
-                  {availableTags.slice(0, 12).map((tag) => (
+                  {initialTags.slice(0, 12).map((tag) => (
                     <button
                       key={tag}
                       onClick={() => handleTagToggle(tag)}

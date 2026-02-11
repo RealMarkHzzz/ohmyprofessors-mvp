@@ -4,13 +4,23 @@ import { FeaturesSection } from '@/components/home/FeaturesSection'
 import { ProfessorListClient } from '@/components/home/ProfessorListClient'
 import { Footer } from '@/components/shared/Footer'
 import { Button } from '@/components/ui/Button'
+import { getProfessors, getAllDepartments, getAllTags } from '@/lib/api/professors'
+import { getAllReviews } from '@/lib/api/reviews'
 
 export const metadata = {
   title: 'OhMyProfessors - Find Your Perfect Professor',
   description: 'Real Student Reviews, Real Decisions. Rate and discover professors at Australian universities.',
 }
 
-export default function Home() {
+export default async function Home() {
+  // Fetch data on the server (Server Component)
+  const [professors, departments, tags, reviews] = await Promise.all([
+    getProfessors(),
+    getAllDepartments(),
+    getAllTags(),
+    getAllReviews(),
+  ])
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -38,7 +48,12 @@ export default function Home() {
             </div>
             
             {/* Professor List - Client Component for interactivity */}
-            <ProfessorListClient />
+            <ProfessorListClient 
+              initialProfessors={professors}
+              initialDepartments={departments}
+              initialTags={tags}
+              initialReviewCount={reviews.length}
+            />
           </div>
         </section>
 

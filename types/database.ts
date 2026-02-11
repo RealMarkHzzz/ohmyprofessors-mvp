@@ -61,7 +61,7 @@ export interface Database {
         Row: {
           id: string
           university_id: string
-          full_name: string
+          name: string  // ✅ Fixed: Changed from full_name to name
           slug: string
           department: string
           title: string | null
@@ -84,7 +84,7 @@ export interface Database {
         Insert: {
           id?: string
           university_id: string
-          full_name: string
+          name: string  // ✅ Fixed: Changed from full_name to name
           slug: string
           department: string
           title?: string | null
@@ -107,7 +107,7 @@ export interface Database {
         Update: {
           id?: string
           university_id?: string
-          full_name?: string
+          name?: string  // ✅ Fixed: Changed from full_name to name
           slug?: string
           department?: string
           title?: string | null
@@ -270,12 +270,63 @@ export interface Database {
           deleted_at?: string | null
         }
       }
+      analytics_events: {
+        Row: {
+          id: string
+          event_type: string
+          user_id: string
+          session_id: string
+          metadata: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          event_type: string
+          user_id: string
+          session_id: string
+          metadata?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          event_type?: string
+          user_id?: string
+          session_id?: string
+          metadata?: Json | null
+          created_at?: string
+        }
+      }
     }
     Views: {
-      [_ in never]: never
+      analytics_daily_stats: {
+        Row: {
+          date: string
+          dau: number
+          page_views: number
+          professor_views: number
+          review_submits: number
+          searches: number
+          sessions: number
+        }
+      }
     }
     Functions: {
-      [_ in never]: never
+      get_dau: {
+        Args: { target_date: string }
+        Returns: number
+      }
+      get_mau: {
+        Args: { target_month: string }
+        Returns: number
+      }
+      get_retention_rate: {
+        Args: { cohort_date: string; days_after: number }
+        Returns: number
+      }
+      get_weekly_reviews: {
+        Args: { week_start: string }
+        Returns: number
+      }
     }
     Enums: {
       user_role: "student" | "admin" | "moderator"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Space_Grotesk } from "next/font/google";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -40,7 +41,9 @@ export default function RootLayout({
         className={`${dmSans.variable} ${spaceGrotesk.variable} font-sans antialiased`}
       >
         <ErrorBoundary>
-          {children}
+          <AnalyticsProvider>
+            {children}
+          </AnalyticsProvider>
         </ErrorBoundary>
       </body>
     </html>
