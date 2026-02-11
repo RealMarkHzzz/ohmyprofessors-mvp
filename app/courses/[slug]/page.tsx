@@ -1,8 +1,10 @@
 /**
  * Course Detail Page
  * 课程详情页 - 展示课程信息和教授对比
+ * 优化：Streaming SSR + Suspense 边界
  */
 
+import { Suspense } from 'react'
 import { getCourseByCode, getCourseProfessors } from '@/lib/api/courses'
 import { ProfessorComparisonTable } from '@/components/courses/ProfessorComparisonTable'
 import { ThreeColumnLayout } from '@/components/layout/ThreeColumnLayout'
@@ -12,6 +14,76 @@ import { notFound } from 'next/navigation'
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>
+}
+
+// 课程信息组件（异步，独立 Suspense 边界）
+async function CourseInfo({ university, code }: { university: string; code: string }) {
+  const course = await getCourseByCode(university, code)
+  if (!course) {
+    notFound()
+  }
+  
+  return (
+    <div className="bg-gradient-to-r from-blue-50 to-white p-8 rounded-2xl border-2 border-blue-500 mb-6">
+      <h1 className="text-4xl font-bold text-gray-950 mb-2">
+        {course.code}
+      </h1>
+      <h2 className="text-xl text-gray-700 mb-4">
+        {course.name}
+      </h2>
+      
+      {/* Course Metadata */}
+      <div className="flex gap-4 text-sm text-gray-600 mb-4 flex-wrap">
+        <span className="flex items-center gap-1">
+          🏛️ {course.university}
+        </span>
+        <span className="flex items-center gap-1">
+          💼 {course.department}
+        </span>
+        {course.credits && (
+          <span className="flex items-center gap-1">
+            📚 {course.credits} credits
+          </span>
+        )}
+      </div>
+      
+      {/* Course Description */}
+      {course.description && (
+        <p className="text-gray-700 mb-4 leading-relaxed">
+          {course.description}
+        </p>
+      )}
+      
+      {/* Course Stats */}
+      <div className="text-lg font-semibold text-gray-900">
+        ⭐ {course.avgRating.toFixed(1)} average rating 
+        <span className="text-gray-600 font-normal"> 
+          ({course.totalReviews} review{course.totalReviews !== 1 ? 's' : ''})
+        </span>
+      </div>
+    </div>
+  )
+}
+
+// 教授对比组件（异步，独立 Suspense 边界）
+async function ProfessorComparison({ courseId }: { courseId: string }) {
+  const professors = await getCourseProfessors(courseId)
+  
+  return (
+    <>
+      <h3 className="text-2xl font-bold text-gray-950 mb-4">
+        Compare Professors Teaching This Course
+      </h3>
+      
+      <ProfessorComparisonTable professors={professors} />
+      
+      {professors.length > 0 && (
+        <p className="text-sm text-gray-600 mt-4">
+          Click on a professor's name to view their full profile and reviews.
+        </p>
+      )}
+    </>
+  )
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
@@ -48,73 +120,37 @@ export default async function CoursePage({ params }: CoursePageProps) {
   // 课程代码是剩余部分
   const code = parts.slice(codeStartIndex).join(' ').toUpperCase()
   
-  // 获取课程信息
+  // 先获取课程 ID（用于教授列表查询）
   const course = await getCourseByCode(university, code)
   if (!course) {
     notFound()
   }
-  
-  // 获取教授该课程的所有教授
-  const professors = await getCourseProfessors(course.id)
   
   return (
     <ThreeColumnLayout
       leftSidebar={<LeftSidebar />}
       mainContent={
         <div className="p-6">
-          {/* Course Info Card */}
-          <div className="bg-gradient-to-r from-blue-50 to-white p-8 rounded-2xl border-2 border-blue-500 mb-6">
-            <h1 className="text-4xl font-bold text-gray-950 mb-2">
-              {course.code}
-            </h1>
-            <h2 className="text-xl text-gray-700 mb-4">
-              {course.name}
-            </h2>
-            
-            {/* Course Metadata */}
-            <div className="flex gap-4 text-sm text-gray-600 mb-4 flex-wrap">
-              <span className="flex items-center gap-1">
-                🏛️ {course.university}
-              </span>
-              <span className="flex items-center gap-1">
-                💼 {course.department}
-              </span>
-              {course.credits && (
-                <span className="flex items-center gap-1">
-                  📚 {course.credits} credits
-                </span>
-              )}
+          {/* 课程信息：使用 Suspense，先显示 Loading，再加载数据 */}
+          <Suspense fallback={
+            <div className="bg-gradient-to-r from-blue-50 to-white p-8 rounded-2xl border-2 border-blue-200 mb-6 animate-pulse">
+              <div className="h-10 bg-gray-200 rounded w-1/3 mb-2"></div>
+              <div className="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-full"></div>
             </div>
-            
-            {/* Course Description */}
-            {course.description && (
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                {course.description}
-              </p>
-            )}
-            
-            {/* Course Stats */}
-            <div className="text-lg font-semibold text-gray-900">
-              ⭐ {course.avgRating.toFixed(1)} average rating 
-              <span className="text-gray-600 font-normal"> 
-                ({course.totalReviews} review{course.totalReviews !== 1 ? 's' : ''})
-              </span>
+          }>
+            <CourseInfo university={university} code={code} />
+          </Suspense>
+          
+          {/* 教授对比：使用 Suspense，独立加载（不阻塞课程信息） */}
+          <Suspense fallback={
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-200 rounded w-1/2 mb-4"></div>
+              <div className="h-64 bg-gray-100 rounded"></div>
             </div>
-          </div>
-          
-          {/* Professor Comparison Section */}
-          <h3 className="text-2xl font-bold text-gray-950 mb-4">
-            Compare Professors Teaching This Course
-          </h3>
-          
-          <ProfessorComparisonTable professors={professors} />
-          
-          {/* Additional Info */}
-          {professors.length > 0 && (
-            <p className="text-sm text-gray-600 mt-4">
-              Click on a professor's name to view their full profile and reviews.
-            </p>
-          )}
+          }>
+            <ProfessorComparison courseId={course.id} />
+          </Suspense>
         </div>
       }
       rightSidebar={<RightSidebar />}

@@ -32,6 +32,7 @@ export function CourseCard({ course }: CourseCardProps) {
   return (
     <Link
       href={`/courses/${slug}`}
+      prefetch={true}
       className="
         block p-5 min-h-[200px]
         border border-gray-200 rounded-xl

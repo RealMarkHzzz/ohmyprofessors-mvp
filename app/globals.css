@@ -320,3 +320,39 @@ html {
 .stagger-item:nth-child(4) { animation-delay: 300ms; }
 .stagger-item:nth-child(5) { animation-delay: 400ms; }
 .stagger-item:nth-child(6) { animation-delay: 500ms; }
+
+/* ========================================
+   View Transitions API - 路由切换动画
+   ======================================== */
+
+/* 启用自动导航过渡（仅 Chrome 111+, Edge 111+） */
+@view-transition {
+  navigation: auto;
+}
+
+/* 淡入淡出动画（200ms） */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
