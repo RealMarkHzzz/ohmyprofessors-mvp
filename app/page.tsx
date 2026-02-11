@@ -1,15 +1,16 @@
 /**
- * Home Page - Course First Mode
- * 课程优先模式首页
+ * Home Page - Course First Mode with Device Detection
+ * 课程优先模式首页（设备检测 + 组件级分叉）
  * 
- * 备注：原教授列表首页已备份到 app/page.professors-backup.tsx
+ * 策略：同一个 URL，根据设备类型渲染完全不同的组件
+ * - 桌面端：三列布局（侧边栏 + 主内容 + 面板）
+ * - 移动端：单列全屏布局 + 底部导航栏
  */
 
-import { ThreeColumnLayout } from '@/components/layout/ThreeColumnLayout'
-import { LeftSidebar } from '@/components/layout/LeftSidebar'
-import { RightSidebar } from '@/components/layout/RightSidebar'
-import { StickySearchBar } from '@/components/layout/StickySearchBar'
-import { CourseList } from '@/components/courses/CourseList'
+import { headers } from 'next/headers'
+import { isMobileDevice } from '@/lib/utils/device'
+import { DesktopHomePage } from '@/components/desktop/DesktopHomePage'
+import { MobileHomePage } from '@/components/mobile/MobileHomePage'
 import { getCourses } from '@/lib/api/courses'
 
 export const metadata = {
@@ -18,8 +19,12 @@ export const metadata = {
 }
 
 export default async function HomePage() {
+  // Server-side Device Detection
+  const headersList = await headers()
+  const userAgent = headersList.get('user-agent') || ''
+  const isMobile = isMobileDevice(userAgent)
+  
   // Fetch courses from database
-  // 如果数据库还没有课程数据，会返回空数组
   let courses: Awaited<ReturnType<typeof getCourses>> = []
   try {
     courses = await getCourses()
@@ -28,42 +33,10 @@ export default async function HomePage() {
     courses = []
   }
   
-  return (
-    <ThreeColumnLayout
-      leftSidebar={<LeftSidebar />}
-      mainContent={
-        <>
-          {/* Hero Section */}
-          <div className="py-8 px-6 text-center bg-gradient-to-r from-blue-50 to-white border-b-2 border-blue-500">
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">
-              Find Your Perfect Course & Professor
-            </h1>
-            <p className="text-base text-gray-600 mb-6">
-              Search by course, compare professors, read real student reviews
-            </p>
-          </div>
-          
-          {/* Sticky Search Bar */}
-          <StickySearchBar placeholder="Search courses (e.g., COMP 1012, Data Structures)..." />
-          
-          {/* Course List */}
-          {courses.length > 0 ? (
-            <CourseList initialCourses={courses} />
-          ) : (
-            <div className="p-8 text-center">
-              <div className="max-w-md mx-auto">
-                <p className="text-gray-600 text-lg mb-2">
-                  📚 No courses available yet
-                </p>
-                <p className="text-gray-500 text-sm">
-                  We're currently adding course data. Check back soon!
-                </p>
-              </div>
-            </div>
-          )}
-        </>
-      }
-      rightSidebar={<RightSidebar />}
-    />
-  )
+  // 根据设备类型渲染不同组件
+  if (isMobile) {
+    return <MobileHomePage courses={courses} />
+  }
+  
+  return <DesktopHomePage courses={courses} />
 }

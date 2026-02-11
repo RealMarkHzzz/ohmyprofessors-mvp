@@ -356,3 +356,66 @@ html {
     opacity: 0;
   }
 }
+
+/* ========================================
+   Mobile Safe Area Support
+   iOS 刘海和底部指示器安全区
+   ======================================== */
+
+/* 顶部安全区 */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* 底部安全区 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 左侧安全区 */
+.safe-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+/* 右侧安全区 */
+.safe-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* 全部安全区 */
+.safe-all {
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+}
+
+/* ========================================
+   Mobile Touch Optimizations
+   移动端触摸优化
+   ======================================== */
+
+/* 优化触摸反馈 */
+@media (hover: none) and (pointer: coarse) {
+  /* 移除 hover 效果 */
+  .card-hover:hover {
+    border-color: #E5E7EB;
+    box-shadow: none;
+  }
+  
+  /* 优化点击反馈 */
+  button,
+  a,
+  .touchable {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
+    touch-action: manipulation;
+  }
+}
+
+/* 移除移动端长按弹出菜单 */
+@media (hover: none) {
+  img,
+  a {
+    -webkit-touch-callout: none;
+  }
+}
