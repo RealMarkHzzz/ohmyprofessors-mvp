@@ -11,7 +11,7 @@ export async function RightSidebar() {
         <h3 className="text-sm font-semibold text-gray-900 mb-4">Quick Stats</h3>
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <Star className="w-5 h-5 text-[#D4AF37]" />
+            <Star className="w-5 h-5 text-blue-500" />
             <div>
               <div className="text-lg font-bold text-gray-900">{totalReviews.toLocaleString()}</div>
               <div className="text-xs text-gray-600">Total Reviews</div>

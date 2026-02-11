@@ -1,51 +1,69 @@
+/**
+ * Home Page - Course First Mode
+ * 课程优先模式首页
+ * 
+ * 备注：原教授列表首页已备份到 app/page.professors-backup.tsx
+ */
+
 import { ThreeColumnLayout } from '@/components/layout/ThreeColumnLayout'
 import { LeftSidebar } from '@/components/layout/LeftSidebar'
 import { RightSidebar } from '@/components/layout/RightSidebar'
 import { StickySearchBar } from '@/components/layout/StickySearchBar'
-import { ProfessorListClient } from '@/components/home/ProfessorListClient'
-import { getProfessors, getAllDepartments, getAllTags } from '@/lib/api/professors'
-import { getAllReviews } from '@/lib/api/reviews'
+import { CourseList } from '@/components/courses/CourseList'
+import { getCourses } from '@/lib/api/courses'
 
 export const metadata = {
-  title: 'OhMyProfessors - Find Your Perfect Professor',
-  description: 'Real Student Reviews, Real Decisions. Rate and discover professors at Australian universities.',
+  title: 'OhMyProfessors - Find Your Best Course & Professor',
+  description: 'Compare professors by course. Real student reviews for Australian universities. Make informed decisions about your classes.',
 }
 
 export default async function HomePage() {
-  // Fetch data on the server (Server Component)
-  const [professors, departments, tags, reviews] = await Promise.all([
-    getProfessors(),
-    getAllDepartments(),
-    getAllTags(),
-    getAllReviews(),
-  ])
+  // Fetch courses from database
+  // 如果数据库还没有课程数据，会返回空数组
+  let courses: Awaited<ReturnType<typeof getCourses>> = []
+  try {
+    courses = await getCourses()
+  } catch (error) {
+    console.error('Error fetching courses:', error)
+    courses = []
+  }
   
   return (
     <ThreeColumnLayout
       leftSidebar={<LeftSidebar />}
       mainContent={
         <>
-          {/* Simplified Hero + Sticky Search */}
-          <div className="py-8 px-6 text-center bg-white border-b border-gray-200">
+          {/* Hero Section */}
+          <div className="py-8 px-6 text-center bg-gradient-to-r from-blue-50 to-white border-b-2 border-blue-500">
             <h1 className="text-4xl font-bold text-gray-900 mb-3">
-              Find Your Perfect Professor
+              Find Your Perfect Course & Professor
             </h1>
             <p className="text-base text-gray-600 mb-6">
-              Real student reviews from Australia&apos;s G8 universities
+              Search by course, compare professors, read real student reviews
             </p>
           </div>
           
-          <StickySearchBar />
+          {/* Sticky Search Bar */}
+          <StickySearchBar placeholder="Search courses (e.g., COMP 1012, Data Structures)..." />
           
-          {/* Professor List */}
-          <div className="p-6">
-            <ProfessorListClient 
-              initialProfessors={professors}
-              initialDepartments={departments}
-              initialTags={tags}
-              initialReviewCount={reviews.length}
-            />
-          </div>
+          {/* Course List */}
+          {courses.length > 0 ? (
+            <CourseList initialCourses={courses} />
+          ) : (
+            <div className="p-8 text-center">
+              <div className="max-w-md mx-auto">
+                <p className="text-gray-600 text-lg mb-4">
+                  🚀 Course data is being migrated
+                </p>
+                <p className="text-gray-500 text-sm">
+                  Run the migration script to populate course data:
+                </p>
+                <pre className="mt-4 p-4 bg-gray-100 rounded text-left text-sm overflow-x-auto">
+                  npx tsx scripts/migrate-to-course-first.ts
+                </pre>
+              </div>
+            </div>
+          )}
         </>
       }
       rightSidebar={<RightSidebar />}

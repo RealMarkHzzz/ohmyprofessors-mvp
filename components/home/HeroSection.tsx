@@ -104,7 +104,7 @@ export function HeroSection() {
                     text-base
                     border-2 border-gray-300
                     rounded-xl
-                    focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/20
+                    focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20
                     focus:outline-none
                     transition-all
                   "
@@ -114,10 +114,10 @@ export function HeroSection() {
                   className="
                     absolute right-2 top-2 bottom-2
                     px-6
-                    bg-[#D4AF37] text-white
+                    bg-blue-500 text-white
                     font-semibold
                     rounded-lg
-                    hover:bg-[#C19B2F]
+                    hover:bg-blue-600
                     transition-colors
                     flex items-center gap-2
                   "

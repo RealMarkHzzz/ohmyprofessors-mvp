@@ -22,7 +22,7 @@ export function LeftSidebar() {
       {/* Logo */}
       <div className="h-16 flex items-center mb-4">
         <Link href="/" className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors">
-          OhMy<span className="text-[#D4AF37]">Professors</span>
+          OhMy<span className="text-blue-500">Professors</span>
         </Link>
       </div>
       
@@ -40,7 +40,7 @@ export function LeftSidebar() {
                 flex items-center gap-4 h-12 px-4 rounded-full
                 font-medium transition-colors
                 ${isActive 
-                  ? 'bg-gray-200 text-gray-900 border-l-4 border-[#D4AF37]' 
+                  ? 'bg-gray-200 text-gray-900 border-l-4 border-blue-500' 
                   : 'text-gray-700 hover:bg-gray-100'
                 }
               `}
@@ -58,8 +58,8 @@ export function LeftSidebar() {
         className="
           flex items-center justify-center gap-2
           w-full h-12 rounded-full
-          bg-[#D4AF37] text-white font-semibold
-          hover:bg-[#C19B2F] transition-colors
+          bg-blue-500 text-white font-semibold
+          hover:bg-blue-600 transition-colors
           shadow-md hover:shadow-lg
         "
       >

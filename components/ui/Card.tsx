@@ -50,7 +50,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
       </p>
       {metric && (
         <div className="text-center mt-4 pt-4 border-t border-gray-200">
-          <p className="text-sm font-semibold" style={{ color: '#D4AF37' }}>
+          <p className="text-sm font-semibold text-blue-500">
             {metric}
           </p>
         </div>
